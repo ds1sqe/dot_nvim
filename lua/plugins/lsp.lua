@@ -1,6 +1,3 @@
-local pythonConfig = require("util.lang.python")
-local haskellConfig = require("util.lang.haskell")
-
 return {
   -- neodev
   {
@@ -19,6 +16,8 @@ return {
   -- tools
   {
     "williamboman/mason.nvim",
+    cmd = "Mason",
+    keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     opts = {
       ensure_installed = {
         "prettierd",
@@ -33,200 +32,138 @@ return {
         "flake8",
       },
     },
+    ---@param opts MasonSettings | {ensure_installed: string[]}
+    config = function(plugin, opts)
+      require("mason").setup(opts)
+      local mr = require("mason-registry")
+      for _, tool in ipairs(opts.ensure_installed) do
+        local p = mr.get_package(tool)
+        if not p:is_installed() then
+          p:install()
+        end
+      end
+    end,
   },
 
   -- lsp servers
   {
     "neovim/nvim-lspconfig",
-    opts = {
-      ---@type lspconfig.options
-      servers = {
-        ansiblels = {},
-        bashls = {},
-        clangd = {},
-        cssls = {},
-        dockerls = {},
-        tsserver = {},
-        svelte = {},
-        eslint = {},
-
-        html = {},
-        hls = {
-          root_dir = haskellConfig.rootdir(),
-          settings = {
-            haskell = {
-              formattingProvider = "stylish-haskell",
-            },
-          },
-        },
-        gopls = {},
-        marksman = {},
-
-        -- Python configs
-        pyright = {
-          root_dir = pythonConfig.rootdir(),
-          --single_file_support = false,
-          settings = {
-            --[boolean]: Determines whether pyright offers auto-import completions.
-            autoImportCompletions = true,
-            servername = "pyright",
-            python = {
-              analysis = {
-                --[boolean]: Determines whether pyright automatically adds common search paths like "src" if there are no execution environments defined in the config file.
-                autoSearchPaths = true,
-                --["openFilesOnly", "workspace"]: Determines whether pyright analyzes (and reports errors for) all files in the workspace, as indicated by the config file. If this option is set to "openFilesOnly", pyright analyzes only open files.
-                diagnosticMode = "workspace",
-                --[boolean]: Determines whether pyright reads, parses and analyzes library code to extract type information in the absence of type stub files. Type information will typically be incomplete. We recommend using type stubs where possible. The default value for this option is false.
-                useLibraryCodeForTypes = false,
-                logLevel = "Information",
-                stubPath = "",
-                --typeshedPaths [array of paths]: Paths to look for typeshed modules. Pyright currently honors only the first path in the array.
-                typeshedPaths = { "" },
-                --["off", "basic", "strict"]: Determines the default type-checking level used by pyright. This can be overridden in the configuration file. (Note: This setting used to be called "pyright.typeCheckingMode". The old name is deprecated but is still currently honored.)
-                typeCheckingMode = "off",
-              },
-              linting = { pylintEnabled = false },
-            },
-          },
-          before_init = function(_, config)
-            config.settings.python.pythonPath = pythonConfig.get_python_path(config.root_dir)
-            -- venvPath is project root + venv
-            --config.settings.python.venvPath = pythonConfig.get_venv_path(config.root_dir)
-            --config.settings.python.venv = "venv"
-          end,
-        },
-        jedi_language_server = {
-          root_dir = pythonConfig.rootdir(),
-          before_init = function(_, config)
-            config.settings.workspace.environmentPath = pythonConfig.get_python_path(config.root_dir)
-          end,
-          settings = {
-            initializationOptions = {
-              codeAction = {
-                nameExtractVariable = "jls_extract_var",
-                nameExtractFunction = "jls_extract_def",
-              },
-              completion = {
-                disableSnippets = false,
-                resolveEagerly = false,
-                ignorePatterns = {},
-              },
-              diagnostics = {
-                enable = true,
-                didOpen = true,
-                didChange = true,
-                didSave = true,
-              },
-              hover = {
-                enable = true,
-                disable = {
-                  -- class= { all= false, names= [], fullNames= [] },
-                  -- function= { all= false, names= [], fullNames= [] },
-                  -- instance= { all= false, names= [], fullNames= [] },
-                  -- keyword= { all= false, names= [], fullNames= [] },
-                  -- module= { all= false, names= [], fullNames= [] },
-                  -- param= { all= false, names= [], fullNames= [] },
-                  -- path= { all= false, names= [], fullNames= [] },
-                  -- property= { all= false, names= [], fullNames= [] },
-                  -- statement= { all= false, names= [], fullNames= [] }
-                },
-              },
-              jediSettings = {
-                autoImportModules = { "django", "numpy", "rest_framework" },
-                caseInsensitiveCompletion = true,
-                debug = false,
-              },
-              markupKindPreferred = "markdown",
-              workspace = {
-                extraPaths = {},
-                --environmentPath= "/path/to/venv/bin/python",
-                symbols = {
-                  ignoreFolders = { ".nox", ".tox", ".venv", "__pycache__", "venv" },
-                  maxSymbols = 333,
-                },
-              },
-            },
-          },
-        },
-
-        rust_analyzer = {
-          settings = {
-            ["rust-analyzer"] = {
-              cargo = { allFeatures = true },
-              checkOnSave = {
-                command = "clippy",
-                extraArgs = { "--no-deps" },
-              },
-            },
-          },
-        },
-        yamlls = {},
-
-        --lua
-        lua_ls = {
-          single_file_support = true,
-          settings = {
-            Lua = {
-              workspace = {
-                checkThirdParty = false,
-              },
-              completion = {
-                workspaceWord = true,
-                callSnippet = "Both",
-              },
-              misc = {
-                parameters = {
-                  "--log-level=trace",
-                },
-              },
-              diagnostics = {
-                -- enable = false,
-                groupSeverity = {
-                  strong = "Hint",
-                  strict = "Warning",
-                },
-                groupFileStatus = {
-                  ["ambiguity"] = "Opened",
-                  ["await"] = "Opened",
-                  ["codestyle"] = "None",
-                  ["duplicate"] = "Opened",
-                  ["global"] = "Opened",
-                  ["luadoc"] = "Opened",
-                  ["redefined"] = "Opened",
-                  ["strict"] = "Opened",
-                  ["strong"] = "Opened",
-                  ["type-check"] = "Opened",
-                  ["unbalanced"] = "Opened",
-                  ["unused"] = "Opened",
-                },
-                unusedLocalExclude = { "_*" },
-              },
-              format = {
-                enable = false,
-                defaultConfig = {
-                  indent_style = "space",
-                  indent_size = "2",
-                  continuation_indent_size = "2",
-                },
-              },
-            },
-          },
-        },
-        vimls = {},
-        -- tailwindcss = {},
-      },
-    },
-  },
-
-  {
-    "neovim/nvim-lspconfig",
-    opts = {
-      setup = {
-        clangd = function(_, opts)
-          opts.capabilities.offsetEncoding = { "utf-16" }
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      { "folke/neoconf.nvim", cmd = "Neoconf", config = true },
+      { "folke/neodev.nvim", opts = { experimental = { pathStrict = true } } },
+      "mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      {
+        "hrsh7th/cmp-nvim-lsp",
+        cond = function()
+          return require("lazyvim.util").has("nvim-cmp")
         end,
       },
     },
+    ---@class PluginLspOpts
+    opts = {
+      -- options for vim.diagnostic.config()
+      diagnostics = {
+        underline = true,
+        update_in_insert = false,
+        virtual_text = { spacing = 4, prefix = "●" },
+        severity_sort = true,
+      },
+      -- Automatically format on save
+      autoformat = true,
+      -- options for vim.lsp.buf.format
+      -- `bufnr` and `filter` is handled by the LazyVim formatter,
+      -- but can be also overridden when specified
+      format = {
+        formatting_options = nil,
+        timeout_ms = nil,
+      },
+      -- LSP Server Settings
+      ---@type lspconfig.options
+      servers = require("config.lsp.servers"),
+      -- you can do any additional lsp server setup here
+      -- return true if you don't want this server to be setup with lspconfig
+      ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
+      setup = {
+        -- example to setup with typescript.nvim
+        -- tsserver = function(_, opts)
+        --   require("typescript").setup({ server = opts })
+        --   return true
+        -- end,
+        -- Specify * to use this function as a fallback for any server
+        -- ["*"] = function(server, opts) end,
+
+        -- clangd = function(_, opts)
+        --   opts.capabilities.offsetEncoding = { "utf-16" }
+        -- end,
+      },
+    },
+    ---@param opts PluginLspOpts
+    config = function(plugin, opts)
+      -- setup autoformat
+      require("config.lsp.format").autoformat = opts.autoformat
+      -- setup formatting and keymaps
+      require("util").on_attach(function(client, buffer)
+        require("config.lsp.format").on_attach(client, buffer)
+        require("config.lsp.keymaps").on_attach(client, buffer)
+        require("config.lsp.capabilities").on_attach(client, bufnr)
+      end)
+      
+       -- diagnostics
+       for name, icon in pairs(require("config").icons.diagnostics) do
+         name = "DiagnosticSign" .. name
+         vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
+       end
+       vim.diagnostic.config(opts.diagnostics)
+      
+       local servers = opts.servers
+       local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+      
+       local function setup(server)
+         local server_opts = vim.tbl_deep_extend("force", {
+           capabilities = vim.deepcopy(capabilities),
+         }, servers[server] or {})
+      
+         if opts.setup[server] then
+           if opts.setup[server](server, server_opts) then
+             return
+           end
+         elseif opts.setup["*"] then
+           if opts.setup["*"](server, server_opts) then
+             return
+           end
+         end
+         require("lspconfig")[server].setup(server_opts)
+       end
+      
+       -- temp fix for lspconfig rename
+       -- https://github.com/neovim/nvim-lspconfig/pull/2439
+       local mappings = require("mason-lspconfig.mappings.server")
+       if not mappings.lspconfig_to_package.lua_ls then
+         mappings.lspconfig_to_package.lua_ls = "lua-language-server"
+         mappings.package_to_lspconfig["lua-language-server"] = "lua_ls"
+       end
+      
+       local mlsp = require("mason-lspconfig")
+       local available = mlsp.get_available_servers()
+      
+       local ensure_installed = {} ---@type string[]
+       for server, server_opts in pairs(servers) do
+         if server_opts then
+           server_opts = server_opts == true and {} or server_opts
+           -- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
+           if server_opts.mason == false or not vim.tbl_contains(available, server) then
+             setup(server)
+           else
+             ensure_installed[#ensure_installed + 1] = server
+           end
+         end
+       end
+      
+      require("mason-lspconfig").setup({ ensure_installed = ensure_installed })
+      require("mason-lspconfig").setup_handlers({ setup })
+    end,
   },
 
   -- null-ls
@@ -258,7 +195,7 @@ return {
           -- nls.builtins.code_actions.gitsigns,
           nls.builtins.formatting.isort,
           nls.builtins.formatting.black,
-          nls.builtins.diagnostics.flake8,
+          --nls.builtins.diagnostics.flake8,
         },
         root_dir = require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", ".git"),
       })

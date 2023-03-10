@@ -2,8 +2,9 @@ return {
   { "shaunsingh/oxocarbon.nvim" },
   { "ellisonleao/gruvbox.nvim" },
   { "rose-pine/neovim", name = "rose-pine" },
+
   {
-    "tokyonight.nvim",
+    "folke/tokyonight.nvim",
     lazy = false,
     priority = 1000,
     opts = function()
@@ -46,5 +47,15 @@ return {
         end,
       }
     end,
+    -- config = function()
+    --   vim.cmd([[colorscheme tokyonight]])
+    -- end,
+  },
+
+  -- catppuccin
+  {
+    "catppuccin/nvim",
+    lazy = true,
+    name = "catppuccin",
   },
 }

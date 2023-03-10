@@ -32,11 +32,18 @@ local M = function()
 
     formatting = {
       fields = { "kind", "abbr", "menu" },
-      format = function(_, item)
+      format = function(entry, item)
         local icons = require("lazyvim.config").icons.kinds
         if icons[item.kind] then
           item.kind = icons[item.kind] .. " " .. item.kind
         end
+
+        if entry.source.name == "nvim_lsp" then
+          item.menu = entry.source.source.client.name
+        else
+          item.menu = entry.source.name
+        end
+
         return item
       end,
     },

@@ -22,3 +22,5 @@ vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>")
 -- change word with <c-c>
 vim.keymap.set("n", "<C-c>", "<cmd>normal! ciw<cr>a")
 
+-- Window split
+vim.keymap.set("n", "w|", "<cmd>vsplit<CR>")

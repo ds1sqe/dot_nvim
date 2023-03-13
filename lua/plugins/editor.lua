@@ -1,7 +1,7 @@
 local Util = require("util")
 
 return {
-	--
+  --
   -- add folding range to capabilities
   -- {
   --   "neovim/nvim-lspconfig",
@@ -55,6 +55,7 @@ return {
       },
       { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (root dir)", remap = true },
       { "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
+      { "<C-l>", "<C-w>l", desc = "Exit window", remap = true },
     },
     deactivate = function()
       vim.cmd([[Neotree close]])

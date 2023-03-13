@@ -76,7 +76,7 @@ return {
     config = function(_, opts)
       require("mini.ai").setup(opts)
       -- register all text objects with which-key
-      if require("lazyvim.util").has("which-key.nvim") then
+      if require("util").has("which-key.nvim") then
         ---@type table<string, string|table>
         local i = {
           [" "] = "Whitespace",

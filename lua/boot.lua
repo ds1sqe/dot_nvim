@@ -7,7 +7,6 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-
 require("lazy").setup({
   root = vim.fn.stdpath("data") .. "/lazy", -- directory where plugins will be installed
   lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json", -- lockfile generated after running update.
@@ -133,4 +132,6 @@ require("lazy").setup({
   state = vim.fn.stdpath("state") .. "/lazy/state.json", -- state info for checker and other things
 })
 
-require("config")
+require("config.keymaps")
+require("config.options")
+require("config.autocmds")

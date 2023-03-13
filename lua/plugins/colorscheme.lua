@@ -10,7 +10,7 @@ return {
     opts = function()
       return {
         style = "night",
-        transparent = false,
+        transparent = true,
         styles = {
           sidebars = "transparent",
           floats = "transparent",
@@ -27,7 +27,8 @@ return {
           local deepDark = "#17171f"
           local deepNavy = "#2d3149"
 
-          hl.Normal = { bg = deepDark }
+          --hl.Normal = { bg = deepDark }
+          --hl.Normal = { bg = nil }
 
           hl.CursorLineNr = { fg = c.orange, bold = true }
 
@@ -47,9 +48,10 @@ return {
         end,
       }
     end,
-    -- config = function()
-    --   vim.cmd([[colorscheme tokyonight]])
-    -- end,
+    config = function()
+      require("tokyonight").load()
+      vim.cmd([[colorscheme tokyonight-night]])
+    end,
   },
 
   -- catppuccin

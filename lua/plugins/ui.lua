@@ -53,7 +53,7 @@ return {
       starter.setup(config)
 
       vim.api.nvim_create_autocmd("User", {
-        pattern = "LazyVimStarted",
+        pattern = "VimStarted",
         callback = function()
           local stats = require("lazy").stats()
           local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
@@ -201,7 +201,7 @@ return {
         diagnostics = "nvim_lsp",
         always_show_bufferline = false,
         diagnostics_indicator = function(_, _, diag)
-          local icons = require("lazyvim.config").icons.diagnostics
+          local icons = require("config.icons").diagnostics
           local ret = (diag.error and icons.Error .. diag.error .. " " or "")
             .. (diag.warning and icons.Warn .. diag.warning or "")
           return vim.trim(ret)
@@ -223,7 +223,7 @@ return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     opts = function(plugin)
-      local icons = require("lazyvim.config").icons
+      local icons = require("config.icons")
 
       local function fg(name)
         return function()
@@ -404,7 +404,7 @@ return {
     lazy = true,
     init = function()
       vim.g.navic_silence = true
-      require("lazyvim.util").on_attach(function(client, buffer)
+      require("util").on_attach(function(client, buffer)
         if client.server_capabilities.documentSymbolProvider then
           require("nvim-navic").attach(client, buffer)
         end
@@ -415,7 +415,7 @@ return {
         separator = " ",
         highlight = true,
         depth_limit = 5,
-        icons = require("lazyvim.config").icons.kinds,
+        icons = require("config.icons").kinds,
       }
     end,
   },

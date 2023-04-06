@@ -23,4 +23,4 @@ vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>")
 vim.keymap.set("n", "<C-c>", "<cmd>normal! ciw<cr>a")
 
 -- Window split
-vim.keymap.set("n", "w|", "<cmd>vsplit<CR>")
+vim.keymap.set("n", "<leader>w|", "<cmd>vsplit<CR>")

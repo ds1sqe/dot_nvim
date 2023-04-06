@@ -85,7 +85,7 @@ require("lazy").setup({
       },
     },
     browser = nil, ---@type string?
-    throttle = 20, -- how frequently should the ui process render events
+    throttle = 60, -- how frequently should the ui process render events
 
     custom_keys = {
       ["<localleader>d"] = function(plugin)

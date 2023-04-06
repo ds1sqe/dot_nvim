@@ -262,7 +262,7 @@ return {
   {
     "uga-rosa/cmp-dictionary",
     version = false, -- lastest
-    event = "BufEnter",
+    event = "InsertEnter",
     config = function()
       require("config.extra.dict").setup()
     end,

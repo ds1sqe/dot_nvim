@@ -1,7 +1,7 @@
 local M = {}
 
-local path = require("lspconfig.util").path
-local root_pattern = require("lspconfig.util").root_pattern
+local path = require("util.lang.common").path
+local root_pattern = require("util.lang.common").root_pattern
 
 local root_files = {
   "pyproject.toml",
@@ -10,6 +10,8 @@ local root_files = {
   "requirements.txt",
   "Pipfile",
   "pyrightconfig.json",
+  "venv",
+  "manage.py",
 }
 
 M.get_python_path = function(workspace)

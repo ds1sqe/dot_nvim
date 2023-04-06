@@ -1,5 +1,5 @@
---local pythonConfig = require("util.lang.python")
---local haskellConfig = require("util.lang.haskell")
+local pythonConfig = require("util.lang.python")
+local haskellConfig = require("util.lang.haskell")
 
 return {
   ansiblels = {},
@@ -29,8 +29,8 @@ return {
       hoverProvider = false,
       definitionProvider = false,
     },
-    --root_dir = pythonConfig.rootdir(),
-    --single_file_support = false,
+    root_dir = pythonConfig.rootdir(),
+    single_file_support = false,
     settings = {
       --[boolean]: Determines whether pyright offers auto-import completions.
       autoImportCompletions = true,
@@ -54,14 +54,14 @@ return {
       },
     },
     before_init = function(_, config)
-     -- config.settings.python.pythonPath = pythonConfig.get_python_path(config.root_dir)
+      config.settings.python.pythonPath = pythonConfig.get_python_path(config.root_dir)
       -- venvPath is project root + venv
-      --config.settings.python.venvPath = pythonConfig.get_venv_path(config.root_dir)
-      --config.settings.python.venv = "venv"
+      config.settings.python.venvPath = pythonConfig.get_venv_path(config.root_dir)
+      config.settings.python.venv = "venv"
     end,
   },
   jedi_language_server = {
-    --root_dir = pythonConfig.rootdir(),
+    root_dir = pythonConfig.rootdir(),
     before_init = function(_, config)
       config.settings.workspace.environmentPath = pythonConfig.get_python_path(config.root_dir)
     end,

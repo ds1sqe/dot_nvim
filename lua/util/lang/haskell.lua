@@ -1,6 +1,6 @@
 local M = {}
 
-local root_pattern = require("lspconfig.util").root_pattern
+local root_pattern = require("util.lang.common").root_pattern
 
 local root_files = {
   "root.hs",

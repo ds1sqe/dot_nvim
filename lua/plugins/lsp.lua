@@ -107,7 +107,7 @@ return {
       require("util").on_attach(function(client, buffer)
         require("config.lsp.format").on_attach(client, buffer)
         require("config.lsp.keymaps").on_attach(client, buffer)
-        require("config.lsp.capabilities").on_attach(client, bufnr)
+        require("config.lsp.capabilities").on_attach(client, buffer)
       end)
 
       -- diagnostics

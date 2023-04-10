@@ -35,7 +35,7 @@ local M = function()
       format = function(entry, item)
         local icons = require("config.icons").kinds
         if icons[item.kind] then
-          item.kind = icons[item.kind] .. " " .. item.kind
+          item.kind = icons[item.kind] .. ">" .. item.kind
         end
 
         if entry.source.name == "nvim_lsp" then
@@ -44,6 +44,9 @@ local M = function()
           item.menu = entry.source.name
         end
 
+        if entry.completion_item.detail ~= nil and entry.completion_item.detail ~= "" then
+          item.menu = item.menu .. ">>" .. entry.completion_item.detail
+        end
         return item
       end,
     },

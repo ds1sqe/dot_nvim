@@ -10,8 +10,8 @@ vim.keymap.set("n", "<right>", "<C-w>l")
 
 vim.keymap.set("n", "<C-h>", "<C-w>h")
 vim.keymap.set("n", "<C-j>", "<C-w>j")
-vim.keymap.set("n", "<C-j>", "<C-w>k")
-vim.keymap.set("n", "<C-k>", "<C-w>l")
+vim.keymap.set("n", "<C-k>", "<C-w>k")
+vim.keymap.set("n", "<C-l>", "<C-w>l")
 
 --- Switch buffers
 vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>")

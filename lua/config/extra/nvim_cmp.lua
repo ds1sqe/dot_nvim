@@ -35,7 +35,7 @@ local M = function()
       format = function(entry, item)
         local icons = require("config.icons").kinds
         if icons[item.kind] then
-          item.kind = icons[item.kind] .. ">" .. item.kind
+          item.kind = icons[item.kind] .. " " .. item.kind
         end
 
         if entry.source.name == "nvim_lsp" then
@@ -45,7 +45,11 @@ local M = function()
         end
 
         if entry.completion_item.detail ~= nil and entry.completion_item.detail ~= "" then
-          item.menu = item.menu .. ">>" .. entry.completion_item.detail
+          local __detail = entry.completion_item.detail
+          if string.len(__detail) >= 43 then
+            __detail = "..." .. string.sub(__detail, -40)
+          end
+          item.menu = item.menu .. " " .. __detail
         end
         return item
       end,
@@ -54,8 +58,8 @@ local M = function()
     window = {
       completion = {
         winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
-        col_offset = -3,
-        side_padding = 0,
+        col_offset = -1,
+        side_padding = 1,
       },
     },
     experimental = {

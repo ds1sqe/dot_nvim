@@ -20,7 +20,7 @@ M.get_theme = function()
 end
 
 M.drop_theme = function()
-  theme = M.get_theme()
+  local theme = M.get_theme()
   if theme == "halloween" then
     return "leaves"
   elseif theme == "winter" then

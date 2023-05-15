@@ -6,9 +6,7 @@ return {
     version = false,
     event = "VimEnter",
     opts = function()
-      local theme = require("config.ui.theme").get()
-      local name = theme.name
-      local logo = theme.header
+      local calender = require("calendar").getCalendar()
       local pad = string.rep(" ", 22)
       local new_section = function(name, action, section)
         return { name = name, action = action, section = pad .. section }
@@ -18,7 +16,7 @@ return {
       --stylua: ignore
       local config = {
         evaluate_single = true,
-        header = logo,
+        header = calender,
         items = {
           new_section("F 🔭 Find file",    "Telescope find_files", "Telescope"),
           new_section("R 🕑 Recent files", "Telescope oldfiles",   "Telescope"),

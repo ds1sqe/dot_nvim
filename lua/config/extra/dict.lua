@@ -1,8 +1,6 @@
 local M = {}
 M.setup = function()
-  -- code
   local dict = require("cmp_dictionary")
-
   dict.setup({
     exact = 2,
     first_case_insensitive = true,
@@ -14,8 +12,7 @@ M.setup = function()
     debug = false,
   })
   dict.switcher({
-    --filepath = {},
-    --filename = {},
+    filepath = { ["*"] = "~/.config/nvim/dict/en.dict" },
     spelllang = {
       en = "~/.config/nvim/dict/en.dict",
     },

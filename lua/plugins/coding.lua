@@ -246,6 +246,7 @@ return {
     keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
     config = true,
   },
+
   {
     "uga-rosa/cmp-dictionary",
     version = false, -- lastest
@@ -254,7 +255,6 @@ return {
       require("config.extra.dict").setup()
     end,
   },
-
   -- auto completion
   {
     "hrsh7th/nvim-cmp",

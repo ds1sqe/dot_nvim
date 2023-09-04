@@ -11,6 +11,7 @@ local root_files = {
   "Pipfile",
   "pyrightconfig.json",
   "venv",
+  ".gitignore",
   "manage.py",
 }
 

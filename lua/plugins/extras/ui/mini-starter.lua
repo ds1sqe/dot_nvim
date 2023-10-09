@@ -20,6 +20,7 @@ return {
         items = {
           new_section("F 🔭 Find file",    "Telescope find_files", "Telescope"),
           new_section("R 🕑 Recent files", "Telescope oldfiles",   "Telescope"),
+          new_section("P 📁 Projects",    "Telescope project",  "Telescope"),
           new_section("G ❓ Grep text",    "Telescope live_grep",  "Telescope"),
           new_section("I ⚙️  init.lua",     "e $MYVIMRC",           "Config"),
           new_section("L 😪 Lazy",         "Lazy",                 "Config"),

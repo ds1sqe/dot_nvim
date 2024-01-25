@@ -12,14 +12,14 @@ return {
   eslint = {},
 
   html = {},
-  hls = {
-    --root_dir = haskellConfig.rootdir(),
-    settings = {
-      haskell = {
-        formattingProvider = "stylish-haskell",
-      },
-    },
-  },
+  -- hls = {
+  --   --root_dir = haskellConfig.rootdir(),
+  --   settings = {
+  --     haskell = {
+  --       formattingProvider = "stylish-haskell",
+  --     },
+  --   },
+  -- },
   gopls = {},
   marksman = {},
 

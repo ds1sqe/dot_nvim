@@ -27,3 +27,6 @@ vim.keymap.set("n", "<leader>w|", "<cmd>vsplit<CR>")
 
 -- exit term mode
 vim.keymap.set("t", "<C-/>", "<C-\\><C-n>")
+
+-- open term
+vim.keymap.set("n", "<leader>t", "<cmd>term<CR>")

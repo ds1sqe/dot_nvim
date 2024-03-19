@@ -103,8 +103,15 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- disable line number when terminal opend
-vim.api.nvim_create_autocmd("TermOpen", {
+vim.api.nvim_create_autocmd("TermEnter", {
   callback = function()
-    vim.opt.num = false
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+  end,
+})
+vim.api.nvim_create_autocmd("TermLeave", {
+  callback = function()
+    vim.opt_local.number = true
+    vim.opt_local.relativenumber = true
   end,
 })

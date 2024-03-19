@@ -101,7 +101,6 @@ return {
       },
       highlight = { enable = true },
       indent = { enable = true, disable = { "python" } },
-      context_commentstring = { enable = true, enable_autocmd = false },
       -- indent = { enable = false },
       query_linter = {
         enable = true,

@@ -101,3 +101,10 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.spell = true
   end,
 })
+
+-- disable line number when terminal opend
+vim.api.nvim_create_autocmd("TermOpen", {
+  callback = function()
+    vim.opt.num = false
+  end,
+})

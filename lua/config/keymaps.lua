@@ -24,3 +24,6 @@ vim.keymap.set("n", "<C-c>", "<cmd>normal! ciw<cr>a")
 
 -- Window split
 vim.keymap.set("n", "<leader>w|", "<cmd>vsplit<CR>")
+
+-- exit term mode
+vim.keymap.set("t", "<C-/>", "<C-\\><C-n>")

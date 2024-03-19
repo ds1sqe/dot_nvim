@@ -331,6 +331,11 @@ return {
           vim.b.miniindentscope_disable = true
         end,
       })
+      vim.api.nvim_create_autocmd("TermOpen", {
+        callback = function()
+          vim.b.miniindentscope_disable = true
+        end,
+      })
     end,
     config = function(_, opts)
       require("mini.indentscope").setup(opts)

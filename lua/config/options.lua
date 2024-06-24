@@ -14,7 +14,7 @@ opt.ignorecase = true -- Ignore case
 opt.inccommand = "nosplit" -- preview incremental substitute
 opt.laststatus = 0
 opt.list = true -- Show some invisible characters (tabs...
-opt.mouse = "a" -- Enable mouse mode
+opt.mouse = "nv" -- Enable mouse mode
 opt.number = true -- Print line number
 opt.relativenumber = true -- Relative line numbers
 opt.pumblend = 10 -- Popup blend
@@ -67,6 +67,26 @@ if vim.fn.has("nvim-0.8") == 1 then
   vim.opt.backup = true
   vim.opt.cmdheight = 0
   vim.opt.backupdir = vim.fn.stdpath("state") .. "/backup"
+end
+
+local is_wsl = vim.fn.has("wsl") == 1
+
+-- WSL Clipboard support
+if is_wsl then
+  -- This is NeoVim's recommended way to solve clipboard sharing if you use WSL
+  -- See: https://github.com/neovim/neovim/wiki/FAQ#how-to-use-the-windows-clipboard-from-wsl
+  vim.g.clipboard = {
+    name = "WslClipboard",
+    copy = {
+      ["+"] = "clip.exe",
+      ["*"] = "clip.exe",
+    },
+    paste = {
+      ["+"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+      ["*"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+    },
+    cache_enabled = 0,
+  }
 end
 
 vim.g.loaded_python3_provider = 0

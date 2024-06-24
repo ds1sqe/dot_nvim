@@ -29,7 +29,7 @@ return {
       hoverProvider = false,
       definitionProvider = false,
     },
-    root_dir = pythonConfig.rootdir(),
+    -- root_dir = pythonConfig.rootdir(),
     single_file_support = false,
     settings = {
       --[boolean]: Determines whether pyright offers auto-import completions.
@@ -53,18 +53,18 @@ return {
         linting = { pylintEnabled = false },
       },
     },
-    before_init = function(_, config)
-      config.settings.python.pythonPath = pythonConfig.get_python_path(config.root_dir)
-      -- venvPath is project root + venv
-      config.settings.python.venvPath = pythonConfig.get_venv_path(config.root_dir)
-      config.settings.python.venv = "venv"
-    end,
+    -- before_init = function(_, config)
+    --   config.settings.python.pythonPath = pythonConfig.get_python_path(config.root_dir)
+    --   -- venvPath is project root + venv
+    --   config.settings.python.venvPath = pythonConfig.get_venv_path(config.root_dir)
+    --   config.settings.python.venv = "venv"
+    -- end,
   },
   jedi_language_server = {
-    root_dir = pythonConfig.rootdir(),
-    before_init = function(_, config)
-      config.settings.workspace.environmentPath = pythonConfig.get_python_path(config.root_dir)
-    end,
+    -- root_dir = pythonConfig.rootdir(),
+    -- before_init = function(_, config)
+    --   config.settings.workspace.environmentPath = pythonConfig.get_python_path(config.root_dir)
+    -- end,
     settings = {
       initializationOptions = {
         codeAction = {
@@ -114,18 +114,6 @@ return {
     },
   },
 
-  -- rust_analyzer = {
-  --   settings = {
-  --     ["rust-analyzer"] = {
-  --       cargo = { allFeatures = true },
-  --       checkOnSave = {
-  --         command = "clippy",
-  --         extraArgs = { "--no-deps" },
-  --       },
-  --     },
-  --   },
-  -- },
-
   yamlls = {},
 
   --lua
@@ -157,7 +145,7 @@ return {
             ["codestyle"] = "None",
             ["duplicate"] = "Opened",
             ["global"] = "Opened",
-            ["luadoc"] = "Opened",
+            -- ["luadoc"] = "Opened",
             ["redefined"] = "Opened",
             ["strict"] = "Opened",
             ["strong"] = "Opened",
@@ -168,7 +156,7 @@ return {
           unusedLocalExclude = { "_*" },
         },
         format = {
-          enable = false,
+          enable = true,
           defaultConfig = {
             indent_style = "space",
             indent_size = "2",
@@ -178,6 +166,8 @@ return {
       },
     },
   },
+  ocamllsp = {},
   vimls = {},
   -- tailwindcss = {},
+  --
 }

@@ -19,6 +19,14 @@ vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>")
 --vim.keymap.set("n", "<down>", "<cmd>bnext<CR>")
 vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>")
 
+-- float term
+vim.keymap.set("n", "<leader>ft",
+  function()
+    util.float_term("zsh", { interactive = true })
+  end,
+  { desc = "Float Term" }
+)
+
 -- change word with <c-c>
 vim.keymap.set("n", "<C-c>", "<cmd>normal! ciw<cr>a")
 
@@ -26,7 +34,7 @@ vim.keymap.set("n", "<C-c>", "<cmd>normal! ciw<cr>a")
 vim.keymap.set("n", "<leader>w|", "<cmd>vsplit<CR>")
 
 -- exit term mode
-vim.keymap.set("t", "<C-/>", "<C-\\><C-n>")
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
 -- open term
 vim.keymap.set("n", "<leader>t", "<cmd>term<CR>")

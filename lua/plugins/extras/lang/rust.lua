@@ -1,33 +1,53 @@
 return {
+
   {
-    "simrat39/rust-tools.nvim",
+    "mrcjkb/rustaceanvim",
+    version = "^4",
     lazy = false,
-    opts = function(_, opts)
-      local rt = require("rust-tools")
-      rt.setup({
-        hover_actions = {
-          auto_focus = true,
-        },
-        dap = {
-          adapter = {
-            type = "executable",
-            command = "codelldb",
-            name = "rt_lldb",
-          },
-        },
-      })
-      require("util").on_attach(function(client, bufnr)
-        if client.name == "rust_analyzer" then
-          vim.keymap.set("n", "<leader>k", require("rust-tools").hover_actions.hover_actions, {
-            buffer = bufnr,
-            desc = "RustTools HoverActions",
-          })
-          -- vim.keymap.set("n", "<leader>a", require("rust-tools").code_action_group.code_action_group, {
-          --   buffer = bufnr,
-          --   desc = "RustTools CodeActionGroup",
-          -- })
+    config = function(_, opts)
+      vim.g.rustaceanvim = function()
+        -- Update this path
+        local extension_path = "/usr/lib/codelldb/"
+        local codelldb_path = extension_path .. "adapter/codelldb"
+        local liblldb_path = extension_path .. "lldb/lib/liblldb"
+        local this_os = vim.uv.os_uname().sysname
+
+        -- The path is different on Windows
+        if this_os:find("Windows") then
+          codelldb_path = extension_path .. "adapter\\codelldb.exe"
+          liblldb_path = extension_path .. "lldb\\bin\\liblldb.dll"
+        else
+          -- The liblldb extension is .so for Linux and .dylib for MacOS
+          liblldb_path = liblldb_path .. (this_os == "Linux" and ".so" or ".dylib")
         end
-      end)
+
+        local cfg = require("rustaceanvim.config")
+
+        return {
+          -- Plugin configuration
+          tools = {},
+          -- LSP configuration
+          server = {
+            on_attach = function(client, bufnr)
+              vim.keymap.set("n", "<leader>a", function()
+                vim.cmd.RustLsp("codeAction")
+              end
+, {
+                buffer = bufnr,
+                desc = "RustTools CodeActionGroup",
+              })
+            end,
+            default_settings = {
+              -- rust-analyzer language server configuration
+              ["rust-analyzer"] = {},
+            },
+          },
+          -- DAP configuration
+          dap = {
+            adapter = cfg.get_codelldb_adapter(codelldb_path, liblldb_path),
+          },
+        }
+      end
     end,
   },
 }

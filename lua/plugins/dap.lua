@@ -1,14 +1,12 @@
 local M = {
-  "mfussenegger/nvim-dap",
+  "rcarriga/nvim-dap-ui",
 
   dependencies = {
     {
+      "mfussenegger/nvim-dap",
+    },
+    {
       "nvim-neotest/nvim-nio",
-      "rcarriga/nvim-dap-ui",
-
-      config = function()
-        require("dapui").setup()
-      end,
     },
     { "jbyuki/one-small-step-for-vimkind" },
   },
@@ -42,17 +40,11 @@ function M.init()
   vim.keymap.set("n", "<leader>du", function()
     require("dapui").toggle({})
   end, { desc = "Dap UI" })
-
-  vim.keymap.set("n", "<leader>ds", function()
-    require("osv").launch({ port = 8086 })
-  end, { desc = "Launch Lua Debugger Server" })
-
-  vim.keymap.set("n", "<leader>dd", function()
-    require("osv").run_this()
-  end, { desc = "Launch Lua Debugger" })
 end
 
 function M.config()
+  require("dapui").setup()
+
   local dap = require("dap")
 
   dap.configurations.lua = {
@@ -119,14 +111,18 @@ function M.config()
   }
 
   local dapui = require("dapui")
-  dap.listeners.after.event_initialized["dapui_config"] = function()
-    dapui.open({})
+
+  dap.listeners.before.attach.dapui_config = function()
+    dapui.open()
   end
-  dap.listeners.before.event_terminated["dapui_config"] = function()
-    dapui.close({})
+  dap.listeners.before.launch.dapui_config = function()
+    dapui.open()
   end
-  dap.listeners.before.event_exited["dapui_config"] = function()
-    dapui.close({})
+  dap.listeners.before.event_terminated.dapui_config = function()
+    dapui.close()
+  end
+  dap.listeners.before.event_exited.dapui_config = function()
+    dapui.close()
   end
 end
 

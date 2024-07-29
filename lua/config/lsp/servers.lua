@@ -23,6 +23,8 @@ return {
   gopls = {},
   marksman = {},
 
+  fsautocomplete = {},
+
   -- Python configs
   pyright = {
     capabilities = {

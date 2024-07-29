@@ -186,4 +186,18 @@ function M.lazy_notify()
   timer:start(500, 0, replay)
 end
 
+--- inspect the entity
+function M.inspect(o)
+  if type(o) == 'table' then
+    local s = '{ '
+    for k, v in pairs(o) do
+      if type(k) ~= 'number' then k = '"' .. k .. '"' end
+      s = s .. '[' .. k .. '] = ' .. M.inspect(v) .. ','
+    end
+    return s .. '} '
+  else
+    return tostring(o)
+  end
+end
+
 return M

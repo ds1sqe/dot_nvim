@@ -46,7 +46,7 @@ return {
     },
     keys = {
       { "<c-space>", desc = "Increment selection" },
-      { "<bs>", desc = "Decrement selection", mode = "x" },
+      { "<bs>",      desc = "Decrement selection", mode = "x" },
     },
     ---@type TSConfig
     opts = {
@@ -55,6 +55,7 @@ return {
         "c",
         "cmake",
         -- "comment", -- comments are slowing down TS bigtime, so disable for now
+        "c_sharp",
         "cpp",
         "css",
         "diff",
@@ -110,7 +111,7 @@ return {
       playground = {
         enable = true,
         disable = {},
-        updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+        updatetime = 25,        -- Debounced time for highlighting nodes in the playground from source code
         persist_queries = true, -- Whether the query persists across vim sessions
         keybindings = {
           toggle_query_editor = "o",

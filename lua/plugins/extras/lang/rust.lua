@@ -32,7 +32,7 @@ return {
               vim.keymap.set("n", "<leader>a", function()
                 vim.cmd.RustLsp("codeAction")
               end
-, {
+              , {
                 buffer = bufnr,
                 desc = "RustTools CodeActionGroup",
               })

@@ -1,6 +1,7 @@
 return {
 
   { "MunifTanjim/nui.nvim" },
+  { "echasnovski/mini.icons" },
   { "nvim-tree/nvim-web-devicons" },
   {
     "rcarriga/nvim-notify",
@@ -131,7 +132,7 @@ return {
     "akinsho/bufferline.nvim",
     event = "VeryLazy",
     keys = {
-      { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle pin" },
+      { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>",            desc = "Toggle pin" },
       { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete non-pinned buffers" },
     },
     opts = {
@@ -141,7 +142,7 @@ return {
         diagnostics_indicator = function(_, _, diag)
           local icons = require("config.icons").diagnostics
           local ret = (diag.error and icons.Error .. diag.error .. " " or "")
-            .. (diag.warning and icons.Warn .. diag.warning or "")
+              .. (diag.warning and icons.Warn .. diag.warning or "")
           return vim.trim(ret)
         end,
         offsets = {
@@ -209,7 +210,7 @@ return {
             {
               function() return require("noice").api.status.mode.get() end,
               cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
-              color = fg("Constant") ,
+              color = fg("Constant"),
             },
             { require("lazy.status").updates, cond = require("lazy.status").has_updates, color = fg("Special") },
             {
@@ -222,7 +223,7 @@ return {
             },
           },
           lualine_y = {
-            { "progress", separator = " ", padding = { left = 1, right = 0 } },
+            { "progress", separator = " ",                  padding = { left = 1, right = 0 } },
             { "location", padding = { left = 0, right = 1 } },
           },
           lualine_z = {

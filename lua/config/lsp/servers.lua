@@ -7,7 +7,6 @@ return {
   clangd = {},
   cssls = {},
   dockerls = {},
-  tsserver = {},
   svelte = {},
   eslint = {},
 
@@ -27,10 +26,10 @@ return {
 
   -- Python configs
   pyright = {
-    capabilities = {
-      hoverProvider = false,
-      definitionProvider = false,
-    },
+    -- capabilities = {
+    --   hoverProvider = true,
+    --   definitionProvider = true,
+    -- },
     -- root_dir = pythonConfig.rootdir(),
     single_file_support = false,
     settings = {
@@ -55,6 +54,7 @@ return {
         linting = { pylintEnabled = false },
       },
     },
+
     -- before_init = function(_, config)
     --   config.settings.python.pythonPath = pythonConfig.get_python_path(config.root_dir)
     --   -- venvPath is project root + venv
@@ -62,60 +62,60 @@ return {
     --   config.settings.python.venv = "venv"
     -- end,
   },
-  jedi_language_server = {
-    -- root_dir = pythonConfig.rootdir(),
-    -- before_init = function(_, config)
-    --   config.settings.workspace.environmentPath = pythonConfig.get_python_path(config.root_dir)
-    -- end,
-    settings = {
-      initializationOptions = {
-        codeAction = {
-          nameExtractVariable = "jls_extract_var",
-          nameExtractFunction = "jls_extract_def",
-        },
-        completion = {
-          disableSnippets = false,
-          resolveEagerly = false,
-          ignorePatterns = {},
-        },
-        diagnostics = {
-          enable = true,
-          didOpen = true,
-          didChange = true,
-          didSave = true,
-        },
-        hover = {
-          enable = true,
-          disable = {
-            -- class= { all= false, names= [], fullNames= [] },
-            -- function= { all= false, names= [], fullNames= [] },
-            -- instance= { all= false, names= [], fullNames= [] },
-            -- keyword= { all= false, names= [], fullNames= [] },
-            -- module= { all= false, names= [], fullNames= [] },
-            -- param= { all= false, names= [], fullNames= [] },
-            -- path= { all= false, names= [], fullNames= [] },
-            -- property= { all= false, names= [], fullNames= [] },
-            -- statement= { all= false, names= [], fullNames= [] }
-          },
-        },
-        jediSettings = {
-          autoImportModules = { "django", "numpy", "rest_framework" },
-          caseInsensitiveCompletion = true,
-          debug = false,
-        },
-        markupKindPreferred = "markdown",
-        workspace = {
-          extraPaths = {},
-          --environmentPath= "/path/to/venv/bin/python",
-          symbols = {
-            ignoreFolders = { ".nox", ".tox", ".venv", "__pycache__", "venv" },
-            maxSymbols = 333,
-          },
-        },
-      },
-    },
-  },
-
+  -- jedi_language_server = {
+  --   -- root_dir = pythonConfig.rootdir(),
+  --   -- before_init = function(_, config)
+  --   --   config.settings.workspace.environmentPath = pythonConfig.get_python_path(config.root_dir)
+  --   -- end,
+  --   settings = {
+  --     initializationOptions = {
+  --       codeAction = {
+  --         nameExtractVariable = "jls_extract_var",
+  --         nameExtractFunction = "jls_extract_def",
+  --       },
+  --       completion = {
+  --         disableSnippets = false,
+  --         resolveEagerly = false,
+  --         ignorePatterns = {},
+  --       },
+  --       diagnostics = {
+  --         enable = true,
+  --         didOpen = true,
+  --         didChange = true,
+  --         didSave = true,
+  --       },
+  --       hover = {
+  --         enable = true,
+  --         disable = {
+  --           -- class= { all= false, names= [], fullNames= [] },
+  --           -- function= { all= false, names= [], fullNames= [] },
+  --           -- instance= { all= false, names= [], fullNames= [] },
+  --           -- keyword= { all= false, names= [], fullNames= [] },
+  --           -- module= { all= false, names= [], fullNames= [] },
+  --           -- param= { all= false, names= [], fullNames= [] },
+  --           -- path= { all= false, names= [], fullNames= [] },
+  --           -- property= { all= false, names= [], fullNames= [] },
+  --           -- statement= { all= false, names= [], fullNames= [] }
+  --         },
+  --       },
+  --       jediSettings = {
+  --         autoImportModules = { "django", "numpy", "rest_framework" },
+  --         caseInsensitiveCompletion = true,
+  --         debug = false,
+  --       },
+  --       markupKindPreferred = "markdown",
+  --       workspace = {
+  --         extraPaths = {},
+  --         --environmentPath= "/path/to/venv/bin/python",
+  --         symbols = {
+  --           ignoreFolders = { ".nox", ".tox", ".venv", "__pycache__", "venv" },
+  --           maxSymbols = 333,
+  --         },
+  --       },
+  --     },
+  --   },
+  -- },
+  --
   yamlls = {},
 
   --lua

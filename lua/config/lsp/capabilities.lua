@@ -7,9 +7,9 @@ function M.on_attach(client, bufnr)
   if client.name == "pyright" then
     --sc.completionProvider = false
     --sc.signatureHelpProvider = false
-    sc.hoverProvider = false
+    -- sc.hoverProvider = false
     sc.definitionProvider = false
-    sc.workspaceSymbolProvider = false
+    -- sc.workspaceSymbolProvider = false
     --sc.documentHighlightProvider = false
 
     -- callHierarchyProvider = true,
@@ -69,8 +69,8 @@ function M.on_attach(client, bufnr)
   end
 
   if client.name == "jedi_language_server" then
-    sc.signatureHelpProvider = false
-    sc.renameProvider = false
+    -- sc.signatureHelpProvider = false
+    -- sc.renameProvider = false
 
     --sc.documentHighlightProvider = false
 

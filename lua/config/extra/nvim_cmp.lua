@@ -45,30 +45,32 @@ local M = function()
           item.menu = entry.source.name
         end
 
+        -- print(util.inspect(entry.completion_item))
 
-        if entry.completion_item.detail ~= nil and entry.completion_item.detail ~= "" then
-          if entry.completion_item.labelDetails ~= nil then
-            if entry.completion_item.labelDetails.detail ~= nil then
-              local __detail = entry.completion_item.labelDetails.detail
-              if string.len(__detail) >= 33 then
-                __detail = ".." .. string.sub(__detail, -30)
-              end
-              item.menu = item.menu .. " " .. __detail
-            end
-            if entry.completion_item.labelDetails.description ~= nil then
-              local __description = entry.completion_item.labelDetails.description
-              if string.len(__description) >= 23 then
-                __description = ".." .. string.sub(__description, -20)
-              end
-              item.menu = item.menu .. " |" .. __description .. "|"
-            end
-          else
-            local __detail = entry.completion_item.detail
-            if string.len(__detail) >= 53 then
-              __detail = "..." .. string.sub(__detail, -50)
+        if entry.completion_item.labelDetails ~= nil then
+          if entry.completion_item.labelDetails.detail ~= nil then
+            local __detail = entry.completion_item.labelDetails.detail
+            if string.len(__detail) >= 33 then
+              __detail = ".." .. string.sub(__detail, -30)
             end
             item.menu = item.menu .. " " .. __detail
           end
+          if entry.completion_item.labelDetails.description ~= nil then
+            local __description = entry.completion_item.labelDetails.description
+            if string.len(__description) >= 23 then
+              __description = ".." .. string.sub(__description, -20)
+            end
+            item.menu = item.menu .. " |" .. __description .. "|"
+          end
+        else
+        end
+
+        if entry.completion_item.detail ~= nil and entry.completion_item.detail ~= "" then
+          local __detail = entry.completion_item.detail
+          if string.len(__detail) >= 53 then
+            __detail = "..." .. string.sub(__detail, -50)
+          end
+          item.menu = item.menu .. " " .. __detail
         end
         return item
       end,

@@ -300,7 +300,7 @@ return {
     "ds1sqe/InputMethodAutoChanger.nvim",
     event = "BufReadPost",
     config = function()
-      require("imac").setup({ debug = true })
+      require("imac").setup({ debug = false })
     end,
   },
 

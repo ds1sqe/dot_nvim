@@ -69,7 +69,7 @@ if vim.fn.has("nvim-0.8") == 1 then
   vim.opt.backupdir = vim.fn.stdpath("state") .. "/backup"
 end
 
-local is_wsl = vim.fn.has("wsl") == 1 or function()
+local check_wsl = function()
   local handle = io.popen("grep -i Microsoft /proc/version")
   if handle ~= nil then
     local result = string.gsub(handle:read("*a"), "[\n\r]", "")
@@ -77,6 +77,7 @@ local is_wsl = vim.fn.has("wsl") == 1 or function()
     return result ~= ""
   end
 end
+local is_wsl = vim.fn.has("wsl") == 1 or check_wsl()
 
 -- WSL Clipboard support
 if is_wsl then

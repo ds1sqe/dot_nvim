@@ -67,6 +67,9 @@ function M.on_attach(client, bufnr)
     --   workDoneProgress = true
     -- }
   end
+  if client.name == "fsautocomplete" then
+    sc.documentFormattingProvider = false
+  end
 
   if client.name == "jedi_language_server" then
     -- sc.signatureHelpProvider = false

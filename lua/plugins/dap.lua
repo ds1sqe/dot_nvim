@@ -104,6 +104,45 @@ function M.config()
     callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
   end
 
+
+  dap.adapters.coreclr = {
+    type = 'executable',
+    command = vim.fn.expand('$HOME/.local/share/nvim/mason/bin/netcoredbg'),
+    args = { '--interpreter=vscode' }
+  }
+
+  dap.configurations.cs = {
+    {
+      type = "coreclr",
+      name = "launch - netcoredbg",
+      request = "launch",
+      -- program = function()
+      --   return vim.fn.input('Path to dll', vim.fn.getcwd(), 'file')
+      -- end,
+    },
+  }
+  dap.configurations.fsharp = {
+    {
+      type = "coreclr",
+      name = "launch - Netcoredbg",
+      request = "launch",
+      program = function()
+        return vim.fn.input('Path to dll', vim.fn.getcwd(), 'file')
+      end,
+      args = function()
+        local args_string = vim.fn.input("Input arguments: ")
+        return vim.split(args_string, " ")
+      end,
+      env = { "VSTEST_HOST_DEBUG=1" }
+    },
+    {
+      type = "coreclr",
+      name = "ATTACH - Netcoredbg",
+      request = "attach",
+      processId = require('dap.utils').pick_process
+    },
+  }
+
   dap.adapters.lldb = {
     type = "executable",
     command = "/usr/bin/lldb-vscode", -- adjust as needed, must be absolute path

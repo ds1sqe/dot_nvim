@@ -22,7 +22,32 @@ return {
   gopls = {},
   marksman = {},
 
-  fsautocomplete = {},
+  fsautocomplete = {
+    cmd = {
+      "/home/ds1sqe/proj/FsAutoComplete/src/FsAutoComplete/bin/Release/net6.0/fsautocomplete",
+      "--adaptive-lsp-server-enabled"
+    },
+    settings = {
+      FSharp = {
+        EnableReferenceCodeLens = true,
+        ExternalAutocomplete = true,
+        InterfaceStubGeneration = true,
+        InterfaceStubGenerationMethodBody = 'failwith "Not Implemented"',
+        InterfaceStubGenerationObjectIdentifier = "this",
+        Linter = true,
+        RecordStubGeneration = true,
+        RecordStubGenerationBody = 'failwith "Not Implemented"',
+        ResolveNamespaces = true,
+        SimplifyNameAnalyzer = true,
+        UnionCaseStubGeneration = true,
+        UnionCaseStubGenerationBody = 'failwith "Not Implemented"',
+        UnusedDeclarationsAnalyzer = true,
+        UnusedOpensAnalyzer = true,
+        UseSdkScripts = true,
+        keywordsAutocomplete = true
+      }
+    }
+  },
 
   -- Python configs
   pyright = {

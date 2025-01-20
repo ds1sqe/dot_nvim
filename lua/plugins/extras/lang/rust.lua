@@ -39,7 +39,11 @@ return {
             end,
             default_settings = {
               -- rust-analyzer language server configuration
-              ["rust-analyzer"] = {},
+              ["rust-analyzer"] = {
+                rustc = {
+                  source = 'discover'
+                }
+              },
             },
           },
           -- DAP configuration

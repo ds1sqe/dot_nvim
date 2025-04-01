@@ -133,6 +133,7 @@ function M.config()
         local args_string = vim.fn.input("Input arguments: ")
         return vim.split(args_string, " ")
       end,
+      sync_with_nvim_tree = true,
       env = { "VSTEST_HOST_DEBUG=1" }
     },
     {

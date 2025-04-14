@@ -2,7 +2,7 @@ local Util = require("lazy.core.util")
 
 local M = {}
 
-M.autoformat = true
+M.autoformat = false
 
 function M.toggle()
   if vim.b.autoformat == false then
@@ -30,9 +30,9 @@ end
 function M.on_attach(client, buf)
   -- dont format if client disabled it
   if
-    client.config
-    and client.config.capabilities
-    and client.config.capabilities.documentFormattingProvider == false
+      client.config
+      and client.config.capabilities
+      and client.config.capabilities.documentFormattingProvider == false
   then
     return
   end

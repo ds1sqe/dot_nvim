@@ -296,13 +296,13 @@ return {
       })
     end,
   },
-  -- {
-  --   "ds1sqe/InputMethodAutoChanger.nvim",
-  --   event = "BufReadPost",
-  --   config = function()
-  --     require("imac").setup("hangul", "xkb:us::eng", false)
-  --   end,
-  -- },
+  {
+    "ds1sqe/InputMethodAutoChanger.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("imac").setup({ debug = false })
+    end,
+  },
 
   {
     "windwp/nvim-ts-autotag",

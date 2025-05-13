@@ -365,16 +365,16 @@ return {
     end,
   },
 
-  --silly drops
-  {
-    "folke/drop.nvim",
-    event = "VeryLazy",
-    enabled = true,
-    config = function()
-      local theme = require("config.ui.theme").drop_theme()
-      require("drop").setup({ theme = theme })
-    end,
-  },
+  -- --silly drops
+  -- {
+  --   "folke/drop.nvim",
+  --   event = "VeryLazy",
+  --   enabled = true,
+  --   config = function()
+  --     local theme = require("config.ui.theme").drop_theme()
+  --     require("drop").setup({ theme = theme })
+  --   end,
+  -- },
 
   {
     "ds1sqe/cusorlineHighlighter.nvim",

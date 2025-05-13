@@ -32,32 +32,14 @@ return {
     -- },
   },
 
-  -- comments
-  { "JoosepAlviste/nvim-ts-context-commentstring", lazy = true },
-
-  {
-    "echasnovski/mini.comment",
-    event = "VeryLazy",
-    opts = {
-      hooks = {
-        pre = function()
-          require("ts_context_commentstring.internal").update_commentstring({})
-        end,
-      },
-    },
-    config = function(_, opts)
-      require("mini.comment").setup(opts)
-    end,
-  },
-
   -- better text-objects
   {
     "echasnovski/mini.ai",
-    keys = { { "[f", desc = "Prev function" }, { "]f", desc = "Next function" } },
-    -- keys = {
-    --   { "a", mode = { "x", "o" } },
-    --   { "i", mode = { "x", "o" } },
-    -- },
+    -- keys = { { "[f", desc = "Prev function" }, { "]f", desc = "Next function" } },
+    -- -- keys = {
+    -- --   { "a", mode = { "x", "o" } },
+    -- --   { "i", mode = { "x", "o" } },
+    -- -- },
     event = "VeryLazy",
     dependencies = { "nvim-treesitter-textobjects" },
 
@@ -303,7 +285,6 @@ return {
       require("imac").setup({ debug = false })
     end,
   },
-
   {
     "windwp/nvim-ts-autotag",
     event = "InsertEnter",
@@ -312,5 +293,5 @@ return {
     end,
   },
 
-  { "wakatime/vim-wakatime",                       event = "VeryLazy" },
+  { "wakatime/vim-wakatime", event = "VeryLazy" },
 }

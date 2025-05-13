@@ -2,6 +2,13 @@
 
 local util = require("util")
 
+
+vim.keymap.del("n", "gra")
+vim.keymap.del("n", "gri")
+vim.keymap.del("n", "grr")
+vim.keymap.del("n", "grn")
+vim.keymap.del("n", "gO")
+
 -- Move to window using the movement keys
 vim.keymap.set("n", "<left>", "<C-w>h")
 vim.keymap.set("n", "<down>", "<C-w>j")
@@ -21,10 +28,10 @@ vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>")
 
 -- float term
 vim.keymap.set("n", "<leader>oft",
-  function()
-    util.float_term("zsh", { interactive = true })
-  end,
-  { desc = "Float Term" }
+	function()
+		util.float_term("zsh", { interactive = true })
+	end,
+	{ desc = "Float Term" }
 )
 vim.keymap.set("n", "<leader>ot", "<cmd>term<CR>")
 

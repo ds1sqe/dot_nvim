@@ -13,9 +13,9 @@ function M.get()
     M._keys = {
       { "<leader>cd", vim.diagnostic.open_float,                 desc = "Line Diagnostics" },
       { "<leader>cl", "<cmd>LspInfo<cr>",                        desc = "Lsp Info" },
-      { "gd",         "<cmd>Telescope lsp_definitions<cr>",      desc = "Goto Definition",       has = "definition" },
-      { "gr",         "<cmd>Telescope lsp_references<cr>",       desc = "References" },
       { "gD",         vim.lsp.buf.declaration,                   desc = "Goto Declaration" },
+      { "gd",         "<cmd>Telescope lsp_definitions<cr>",      desc = "Goto Definition",       has = "definition" },
+      { "glr",        "<cmd>Telescope lsp_references<cr>",       desc = "References" },
       { "gI",         "<cmd>Telescope lsp_implementations<cr>",  desc = "Goto Implementation" },
       { "gt",         "<cmd>Telescope lsp_type_definitions<cr>", desc = "Goto Type Definition" },
       { "K",          vim.lsp.buf.hover,                         desc = "Hover" },

@@ -127,11 +127,41 @@ function M.config()
       name = "launch - Netcoredbg",
       request = "launch",
       program = function()
-        return vim.fn.input('Path to dll', vim.fn.getcwd(), 'file')
+        local conf = vim.fn.json_decode(vim.fn.readfile(".dap.conf.json"))
+        local path_to_dll =
+            function()
+              if conf and conf.path then
+                return require("util").get_root() .. "/" .. conf.path
+              else
+                return vim.fn.input('Path to dll', vim.fn.getcwd(), 'file')
+              end
+            end
+        return path_to_dll()
       end,
       args = function()
-        local args_string = vim.fn.input("Input arguments: ")
-        return vim.split(args_string, " ")
+        local conf = vim.fn.json_decode(vim.fn.readfile(".dap.conf.json"))
+        local get_args =
+            function()
+              if conf and conf.args then
+                return vim.split(conf.args, " ")
+              else
+                local args_string = vim.fn.input("Input arguments: ")
+                return vim.split(args_string, " ")
+              end
+            end
+        return get_args()
+      end,
+      cwd = function()
+        local conf = vim.fn.json_decode(vim.fn.readfile(".dap.conf.json"))
+        local get_cwd =
+            function()
+              if conf and conf.cwd then
+                return vim.fn.expand(conf.cwd)
+              else
+                return vim.fn.input("Target cwd:", vim.fn.getcwd())
+              end
+            end
+        return get_cwd()
       end,
       sync_with_nvim_tree = true,
       env = { "VSTEST_HOST_DEBUG=1" }

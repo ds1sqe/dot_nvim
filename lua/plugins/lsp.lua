@@ -1,14 +1,13 @@
 return {
   -- neodev
   {
-    "folke/neodev.nvim",
+    "folke/lazydev.nvim",
+    ft = "lua",
     opts = {
-      debug = true,
-      experimental = {
-        pathStrict = true,
-      },
       library = {
-        runtime = "~/projects/neovim/runtime/",
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
       },
     },
   },
@@ -51,8 +50,7 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     lazy = false,
     dependencies = {
-      { "folke/neoconf.nvim", cmd = "Neoconf",                                config = true },
-      { "folke/neodev.nvim",  opts = { experimental = { pathStrict = true } } },
+      { "folke/neoconf.nvim", cmd = "Neoconf", config = true },
       "mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       {

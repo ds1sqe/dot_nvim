@@ -1,46 +1,13 @@
 local Util = require("util")
 
 return {
-  --
-  -- add folding range to capabilities
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   opts = {
-  --     capabilities = {
-  --       textDocument = {
-  --         foldingRange = {
-  --           dynamicRegistration = false,
-  --           lineFoldingOnly = true,
-  --         },
-  --       },
-  --     },
-  --   },
-  -- },
-
-  -- add nvim-ufo
-  -- {
-  --   "kevinhwang91/nvim-ufo",
-  --   dependencies = "kevinhwang91/promise-async",
-  --   event = "BufReadPost",
-  --   opts = {},
-  --
-  --   init = function()
-  --     vim.keymap.set("n", "zR", function()
-  --       require("ufo").openAllFolds()
-  --     end)
-  --     vim.keymap.set("n", "zM", function()
-  --       require("ufo").closeAllFolds()
-  --     end)
-  --   end,
-  -- },
-
   -- file explorer
   {
     "nvim-neo-tree/neo-tree.nvim",
     cmd = "Neotree",
     keys = {
       {
-        "<leader>fe",
+        "<leader>e",
         function()
           require("neo-tree.command").execute({
             toggle = true,
@@ -50,16 +17,7 @@ return {
         end,
         desc = "Explorer NeoTree (root dir)",
       },
-      {
-        "<leader>fE",
-        function()
-          require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
-        end,
-        desc = "Explorer NeoTree (cwd)",
-      },
-      { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (root dir)", remap = true },
-      { "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)",      remap = true },
-      { "<C-l>",     "<C-w>l",     desc = "Exit window",                 remap = true },
+      { "<leader>E", desc = "Explorer NeoTree (cwd)", remap = true },
     },
     deactivate = function()
       vim.cmd([[Neotree close]])
@@ -118,9 +76,6 @@ return {
       { "<leader>ff",      Util.telescope("files"),                                  desc = "Find Files (root dir)" },
       { "<leader>fF",      Util.telescope("files", { cwd = false }),                 desc = "Find Files (cwd)" },
       { "<leader>fr",      "<cmd>Telescope oldfiles<cr>",                            desc = "Recent" },
-      -- git
-      { "<leader>ggc",     "<cmd>Telescope git_commits<CR>",                         desc = "commits" },
-      { "<leader>ggs",     "<cmd>Telescope git_status<CR>",                          desc = "status" },
       -- search
       { "<leader>sa",      "<cmd>Telescope autocommands<cr>",                        desc = "Auto Commands" },
       { "<leader>sb",      "<cmd>Telescope current_buffer_fuzzy_find<cr>",           desc = "Buffer" },
@@ -261,8 +216,6 @@ return {
       wk.setup(opts)
       local keymaps = {
         mode = { "n", "v" },
-        { "g",             group = "goto" },
-        { "gz",            group = "surround" },
         { "]",             group = "next" },
         { "[",             group = "prev" },
         { "<leader><tab>", group = "tabs" },
@@ -276,7 +229,6 @@ return {
         { "<leader>u",     group = "ui" },
         { "<leader>w",     group = "windows" },
         { "<leader>x",     group = "diagnostics/quickfix" },
-        { "<leader>sn",    group = "noice" }
       }
       wk.add(keymaps)
     end,

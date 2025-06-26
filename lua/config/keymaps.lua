@@ -2,12 +2,13 @@
 
 local util = require("util")
 
-
 vim.keymap.del("n", "gra")
 vim.keymap.del("n", "gri")
 vim.keymap.del("n", "grr")
 vim.keymap.del("n", "grn")
 vim.keymap.del("n", "gO")
+vim.keymap.del("n", "gcc")
+vim.keymap.del("n", "gc")
 
 -- Move to window using the movement keys
 vim.keymap.set("n", "<left>", "<C-w>h")
@@ -22,16 +23,14 @@ vim.keymap.set("n", "<C-l>", "<C-w>l")
 
 --- Switch buffers
 vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>")
---vim.keymap.set("n", "<up>", "<cmd>bprevious<CR>")
---vim.keymap.set("n", "<down>", "<cmd>bnext<CR>")
 vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>")
 
 -- float term
 vim.keymap.set("n", "<leader>oft",
-	function()
-		util.float_term("zsh", { interactive = true })
-	end,
-	{ desc = "Float Term" }
+  function()
+    util.float_term("zsh", { interactive = true })
+  end,
+  { desc = "Float Term" }
 )
 vim.keymap.set("n", "<leader>ot", "<cmd>term<CR>")
 

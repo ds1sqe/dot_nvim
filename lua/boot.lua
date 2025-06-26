@@ -7,6 +7,9 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Load keymaps first to disable default keymap
+require("config.keymaps")
+
 require("lazy").setup({
   root = vim.fn.stdpath("data") .. "/lazy",                 -- directory where plugins will be installed
   lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json", -- lockfile generated after running update.
@@ -15,6 +18,9 @@ require("lazy").setup({
     { import = "plugins" },
     { import = "plugins.extras.ui" },
     { import = "plugins.extras.lang" },
+  },
+  rocks = {
+    enabled = false
   },
 
   defaults = { lazy = true },
@@ -40,19 +46,6 @@ require("lazy").setup({
     cache = {
       enabled = true,
       -- disable_events = {},
-    },
-    rtp = {
-      disabled_plugins = {
-        "gzip",
-        "matchit",
-        "matchparen",
-        "netrwPlugin",
-        "rplugin",
-        "tarPlugin",
-        "tohtml",
-        "tutor",
-        "zipPlugin",
-      },
     },
   },
   ui = {
@@ -106,9 +99,6 @@ require("lazy").setup({
       end,
     },
   },
-  diff = {
-    cmd = "terminal_git",
-  },
 
   checker = {
     -- automatically check for plugin updates
@@ -132,7 +122,6 @@ require("lazy").setup({
   state = vim.fn.stdpath("state") .. "/lazy/state.json", -- state info for checker and other things
 })
 
-require("config.keymaps")
 require("config.options")
 require("config.autocmds")
 require("config.filetype")

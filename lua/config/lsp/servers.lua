@@ -16,7 +16,7 @@ return {
         "build.ninja"
       )(fname) or require("lspconfig.util").root_pattern("compile_commands.json", "compile_flags.txt")(
         fname
-      ) or require("lspconfig.util").find_git_ancestor(fname)
+      ) or vim.fs.dirname(vim.fs.find('.git', { path = fname, upward = true })[1])
     end,
     capabilities = {
       offsetEncoding = { "utf-16" },
@@ -42,14 +42,14 @@ return {
   eslint = {},
 
   html = {},
-  -- hls = {
-  --   --root_dir = haskellConfig.rootdir(),
-  --   settings = {
-  --     haskell = {
-  --       formattingProvider = "stylish-haskell",
-  --     },
-  --   },
-  -- },
+  hls = {
+    root_dir = haskellConfig.rootdir(),
+    settings = {
+      haskell = {
+        formattingProvider = "stylish-haskell",
+      },
+    },
+  },
   gopls = {},
   marksman = {},
 
@@ -82,10 +82,6 @@ return {
 
   -- Python configs
   pyright = {
-    -- capabilities = {
-    --   hoverProvider = true,
-    --   definitionProvider = true,
-    -- },
     -- root_dir = pythonConfig.rootdir(),
     single_file_support = false,
     settings = {
@@ -111,67 +107,73 @@ return {
       },
     },
 
-    -- before_init = function(_, config)
-    --   config.settings.python.pythonPath = pythonConfig.get_python_path(config.root_dir)
-    --   -- venvPath is project root + venv
-    --   config.settings.python.venvPath = pythonConfig.get_venv_path(config.root_dir)
-    --   config.settings.python.venv = "venv"
-    -- end,
+    before_init = function(_, config)
+      config.settings.python.pythonPath = pythonConfig.get_python_path(config.root_dir)
+      -- venvPath is project root + venv
+      config.settings.python.venvPath = pythonConfig.get_venv_path(config.root_dir)
+      config.settings.python.venv = "venv"
+    end,
   },
-  -- jedi_language_server = {
-  --   -- root_dir = pythonConfig.rootdir(),
-  --   -- before_init = function(_, config)
-  --   --   config.settings.workspace.environmentPath = pythonConfig.get_python_path(config.root_dir)
-  --   -- end,
-  --   settings = {
-  --     initializationOptions = {
-  --       codeAction = {
-  --         nameExtractVariable = "jls_extract_var",
-  --         nameExtractFunction = "jls_extract_def",
-  --       },
-  --       completion = {
-  --         disableSnippets = false,
-  --         resolveEagerly = false,
-  --         ignorePatterns = {},
-  --       },
-  --       diagnostics = {
-  --         enable = true,
-  --         didOpen = true,
-  --         didChange = true,
-  --         didSave = true,
-  --       },
-  --       hover = {
-  --         enable = true,
-  --         disable = {
-  --           -- class= { all= false, names= [], fullNames= [] },
-  --           -- function= { all= false, names= [], fullNames= [] },
-  --           -- instance= { all= false, names= [], fullNames= [] },
-  --           -- keyword= { all= false, names= [], fullNames= [] },
-  --           -- module= { all= false, names= [], fullNames= [] },
-  --           -- param= { all= false, names= [], fullNames= [] },
-  --           -- path= { all= false, names= [], fullNames= [] },
-  --           -- property= { all= false, names= [], fullNames= [] },
-  --           -- statement= { all= false, names= [], fullNames= [] }
-  --         },
-  --       },
-  --       jediSettings = {
-  --         autoImportModules = { "django", "numpy", "rest_framework" },
-  --         caseInsensitiveCompletion = true,
-  --         debug = false,
-  --       },
-  --       markupKindPreferred = "markdown",
-  --       workspace = {
-  --         extraPaths = {},
-  --         --environmentPath= "/path/to/venv/bin/python",
-  --         symbols = {
-  --           ignoreFolders = { ".nox", ".tox", ".venv", "__pycache__", "venv" },
-  --           maxSymbols = 333,
-  --         },
-  --       },
-  --     },
-  --   },
-  -- },
-  --
+
+  jedi_language_server = {
+    -- root_dir = pythonConfig.rootdir(),
+    settings = {
+      initializationOptions = {
+        codeAction = {
+          nameExtractVariable = "jls_extract_var",
+          nameExtractFunction = "jls_extract_def",
+        },
+        completion = {
+          disableSnippets = false,
+          resolveEagerly = false,
+          ignorePatterns = {},
+        },
+        diagnostics = {
+          enable = true,
+          didOpen = true,
+          didChange = true,
+          didSave = true,
+        },
+        hover = {
+          enable = true,
+          disable = {
+            -- class= { all= false, names= [], fullNames= [] },
+            -- function= { all= false, names= [], fullNames= [] },
+            -- instance= { all= false, names= [], fullNames= [] },
+            -- keyword= { all= false, names= [], fullNames= [] },
+            -- module= { all= false, names= [], fullNames= [] },
+            -- param= { all= false, names= [], fullNames= [] },
+            -- path= { all= false, names= [], fullNames= [] },
+            -- property= { all= false, names= [], fullNames= [] },
+            -- statement= { all= false, names= [], fullNames= [] }
+          },
+        },
+        jediSettings = {
+          autoImportModules = { "django", "numpy", "rest_framework" },
+          caseInsensitiveCompletion = true,
+          debug = false,
+        },
+        markupKindPreferred = "markdown",
+        workspace = {
+          extraPaths = {},
+          --environmentPath= "/path/to/venv/bin/python",
+          symbols = {
+            ignoreFolders = { ".nox", ".tox", ".venv", "__pycache__", "venv" },
+            maxSymbols = 333,
+          },
+        },
+      },
+    },
+
+    before_init = function(_, config)
+      config.settings = {
+        workspace = {
+          environmentPath = pythonConfig.get_python_path(config.root_dir)
+        }
+      }
+    end,
+  },
+
   yamlls = {},
 
   --lua

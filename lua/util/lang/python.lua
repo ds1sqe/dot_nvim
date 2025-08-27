@@ -39,22 +39,22 @@ M.rootdir = function()
   return root_pattern(unpack(root_files))
 end
 
--- M.get_venv_path = function(workspace)
---   -- Use activated virtualenv.
---   if vim.env.VIRTUAL_ENV then
---     return vim.env.VIRTUAL_ENV
---   end
---
---   -- Find and use virtualenv in workspace directory.
---   for _, pattern in ipairs({ "*", ".*" }) do
---     local match = vim.fn.glob(path.join(workspace, pattern, "pyvenv.cfg"))
---     if match ~= "" then
---       return path.join(path.dirname(match))
---     end
---   end
---
---   -- Fallback to nullstring
---   return ""
--- end
+M.get_venv_path = function(workspace)
+  -- Use activated virtualenv.
+  if vim.env.VIRTUAL_ENV then
+    return vim.env.VIRTUAL_ENV
+  end
+
+  -- Find and use virtualenv in workspace directory.
+  for _, pattern in ipairs({ "*", ".*" }) do
+    local match = vim.fn.glob(path.join(workspace, pattern, "pyvenv.cfg"))
+    if match ~= "" then
+      return path.join(path.dirname(match))
+    end
+  end
+
+  -- Fallback to nullstring
+  return ""
+end
 --
 return M

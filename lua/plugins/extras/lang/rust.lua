@@ -2,7 +2,7 @@ return {
 
   {
     "mrcjkb/rustaceanvim",
-    version = "^4",
+    version = "^6",
     lazy = false,
     config = function(_, opts)
       vim.g.rustaceanvim = function()
@@ -29,7 +29,7 @@ return {
           -- LSP configuration
           server = {
             on_attach = function(client, bufnr)
-              vim.keymap.set("n", "<leader>a", function()
+              vim.keymap.set("n", "<leader>r", function()
                 vim.cmd.RustLsp("codeAction")
               end
               , {

@@ -5,7 +5,6 @@ function M.on_attach(client, bufnr)
   local sc = client.server_capabilities
 
   if client.name == "pyright" then
-    sc.completionProvider = false
     sc.signatureHelpProvider = false
     sc.hoverProvider = false
     sc.definitionProvider = false

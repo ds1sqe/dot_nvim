@@ -4,6 +4,71 @@ return {
   { "echasnovski/mini.icons" },
   { "nvim-tree/nvim-web-devicons" },
   {
+    'nvim-focus/focus.nvim',
+    version = false,
+    opts = {
+      enable = true,                 -- Enable module
+      commands = true,               -- Create Focus commands
+      autoresize = {
+        enable = true,               -- Enable or disable auto-resizing of splits
+        width = 0,                   -- Force width for the focused window
+        height = 0,                  -- Force height for the focused window
+        minwidth = 20,               -- Force minimum width for the unfocused window
+        minheight = 0,               -- Force minimum height for the unfocused window
+        focusedwindow_minwidth = 80, --Force minimum width for the focused window
+        focusedwindow_minheight = 0, --Force minimum height for the focused window
+        height_quickfix = 10,        -- Set the height of quickfix panel
+      },
+      split = {
+        bufnew = false, -- Create blank buffer for new split windows
+        tmux = false,   -- Create tmux splits instead of neovim splits
+      },
+      ui = {
+        number = false,                   -- Display line numbers in the focussed window only
+        relativenumber = false,           -- Display relative line numbers in the focussed window only
+        hybridnumber = true,              -- Display hybrid line numbers in the focussed window only
+        absolutenumber_unfocussed = true, -- Preserve absolute numbers in the unfocussed windows
+        cursorline = true,                -- Display a cursorline in the focussed window only
+        cursorcolumn = false,             -- Display cursorcolumn in the focussed window only
+        colorcolumn = {
+          enable = true,                  -- Display colorcolumn in the foccused window only
+          list = '+1,+2,+3',              -- Set the comma-saperated list for the colorcolumn
+        },
+        signcolumn = true,                -- Display signcolumn in the focussed window only
+        winhighlight = false,             -- Auto highlighting for focussed/unfocussed windows
+      }
+    },
+    keys = function()
+      local keymap = {}
+
+      local focusmap = function(direction)
+        table.insert(keymap,
+          {
+            "<leader>w" .. direction,
+            function()
+              require('focus').split_command(direction)
+            end,
+            mode = { "n" },
+            desc = string.format('Create or move to split (%s)', direction),
+          })
+
+        table.insert(keymap,
+          {
+            "<C-" .. direction .. ">",
+            "<cmd>wincmd " .. direction .. "<CR>",
+            mode = { "i", "n" },
+            desc = string.format('move to split (%s)', direction),
+          })
+      end
+      focusmap('h')
+      focusmap('j')
+      focusmap('k')
+      focusmap('l')
+      return keymap
+    end,
+    lazy = false,
+  },
+  {
     "rcarriga/nvim-notify",
     keys = {
       {
@@ -98,7 +163,7 @@ return {
                 hint = icons.diagnostics.Hint,
               },
             },
-            { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
+            { "filetype", icon_only = false, separator = "", padding = { left = 1, right = 0 } },
             { "filename", path = 1, symbols = { modified = "  ", readonly = "", unnamed = "" } },
             -- stylua: ignore
             {
@@ -163,24 +228,6 @@ return {
           local icon, color = require("nvim-web-devicons").get_icon_color(filename)
           return { { icon, guifg = color }, { " " }, { filename } }
         end,
-      })
-    end,
-  },
-
-  -- auto-resize windows
-  {
-    "anuvyklack/windows.nvim",
-    event = "WinNew",
-    dependencies = {
-      { "anuvyklack/middleclass" },
-      { "anuvyklack/animation.nvim", enabled = false },
-    },
-    keys = { { "<leader>Z", "<cmd>WindowsMaximize<cr>", desc = "Zoom" } },
-    config = function()
-      vim.o.winwidth = 5
-      vim.o.equalalways = false
-      require("windows").setup({
-        animation = { enable = false, duration = 150 },
       })
     end,
   },

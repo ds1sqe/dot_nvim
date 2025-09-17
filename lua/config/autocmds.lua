@@ -8,12 +8,6 @@ vim.api.nvim_create_autocmd("BufLeave", {
     vim.cmd("hi LineNr guifg=#3b4261")
   end,
 })
-vim.api.nvim_create_autocmd("BufEnter", {
-  group = augroup("setLineNumber"),
-  callback = function()
-    vim.opt.nu = true
-  end,
-})
 
 --- create directories when needed, when saving a file
 vim.api.nvim_create_autocmd("BufWritePre", {
@@ -92,19 +86,5 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.opt_local.wrap = true
     vim.opt_local.spell = true
-  end,
-})
-
--- disable line number when terminal opend
-vim.api.nvim_create_autocmd("TermEnter", {
-  callback = function()
-    vim.opt_local.number = false
-    vim.opt_local.relativenumber = false
-  end,
-})
-vim.api.nvim_create_autocmd("TermLeave", {
-  callback = function()
-    vim.opt_local.number = true
-    vim.opt_local.relativenumber = true
   end,
 })

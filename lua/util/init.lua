@@ -53,7 +53,7 @@ function M.get_root()
   ---@type string[]
   local roots = {}
   if path then
-    for _, client in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
+    for _, client in pairs(vim.lsp.get_clients()) do
       local workspace = client.config.workspace_folders
       local paths = workspace and vim.tbl_map(function(ws)
         return vim.uri_to_fname(ws.uri)
@@ -100,53 +100,6 @@ function M.telescope(builtin, opts)
     end
     require("telescope.builtin")[builtin](opts)
   end
-end
-
--- Opens a floating terminal (interactive by default)
----@param cmd? string[]|string
----@param opts? LazyCmdOptions|{interactive?:boolean}
-function M.float_term(cmd, opts)
-  opts = vim.tbl_deep_extend("force", {
-    size = { width = 0.9, height = 0.9 },
-  }, opts or {})
-  require("lazy.util").float_term(cmd, opts)
-end
-
----@param silent boolean?
----@param values? {[1]:any, [2]:any}
-function M.toggle(option, silent, values)
-  if values then
-    if vim.opt_local[option]:get() == values[1] then
-      vim.opt_local[option] = values[2]
-    else
-      vim.opt_local[option] = values[1]
-    end
-    return Util.info("Set " .. option .. " to " .. vim.opt_local[option]:get(), { title = "Option" })
-  end
-  vim.opt_local[option] = not vim.opt_local[option]:get()
-  if not silent then
-    if vim.opt_local[option]:get() then
-      Util.info("Enabled " .. option, { title = "Option" })
-    else
-      Util.warn("Disabled " .. option, { title = "Option" })
-    end
-  end
-end
-
-local enabled = true
-function M.toggle_diagnostics()
-  enabled = not enabled
-  if enabled then
-    vim.diagnostic.enable()
-    Util.info("Enabled diagnostics", { title = "Diagnostics" })
-  else
-    vim.diagnostic.disable()
-    Util.warn("Disabled diagnostics", { title = "Diagnostics" })
-  end
-end
-
-function M.deprecate(old, new)
-  Util.warn(("`%s` is deprecated. Please use `%s` instead"):format(old, new), { title = "LazyVim" })
 end
 
 -- delay notifications till vim.notify was replaced or after 500ms

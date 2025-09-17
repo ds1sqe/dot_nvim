@@ -4,66 +4,64 @@ return {
   { "echasnovski/mini.icons" },
   { "nvim-tree/nvim-web-devicons" },
   {
-    'nvim-focus/focus.nvim',
+    "nvim-focus/focus.nvim",
     version = false,
     opts = {
-      enable = true,                 -- Enable module
-      commands = true,               -- Create Focus commands
+      enable = true, -- Enable module
+      commands = true, -- Create Focus commands
       autoresize = {
-        enable = true,               -- Enable or disable auto-resizing of splits
-        width = 0,                   -- Force width for the focused window
-        height = 0,                  -- Force height for the focused window
-        minwidth = 20,               -- Force minimum width for the unfocused window
-        minheight = 0,               -- Force minimum height for the unfocused window
+        enable = true, -- Enable or disable auto-resizing of splits
+        width = 0, -- Force width for the focused window
+        height = 0, -- Force height for the focused window
+        minwidth = 20, -- Force minimum width for the unfocused window
+        minheight = 0, -- Force minimum height for the unfocused window
         focusedwindow_minwidth = 80, --Force minimum width for the focused window
         focusedwindow_minheight = 0, --Force minimum height for the focused window
-        height_quickfix = 10,        -- Set the height of quickfix panel
+        height_quickfix = 10, -- Set the height of quickfix panel
       },
       split = {
         bufnew = false, -- Create blank buffer for new split windows
-        tmux = false,   -- Create tmux splits instead of neovim splits
+        tmux = false, -- Create tmux splits instead of neovim splits
       },
       ui = {
-        number = false,                   -- Display line numbers in the focussed window only
-        relativenumber = false,           -- Display relative line numbers in the focussed window only
-        hybridnumber = true,              -- Display hybrid line numbers in the focussed window only
+        number = false, -- Display line numbers in the focussed window only
+        relativenumber = false, -- Display relative line numbers in the focussed window only
+        hybridnumber = true, -- Display hybrid line numbers in the focussed window only
         absolutenumber_unfocussed = true, -- Preserve absolute numbers in the unfocussed windows
-        cursorline = true,                -- Display a cursorline in the focussed window only
-        cursorcolumn = false,             -- Display cursorcolumn in the focussed window only
+        cursorline = true, -- Display a cursorline in the focussed window only
+        cursorcolumn = false, -- Display cursorcolumn in the focussed window only
         colorcolumn = {
-          enable = true,                  -- Display colorcolumn in the foccused window only
-          list = '+1,+2,+3',              -- Set the comma-saperated list for the colorcolumn
+          enable = true, -- Display colorcolumn in the foccused window only
+          list = "+1,+2,+3", -- Set the comma-saperated list for the colorcolumn
         },
-        signcolumn = true,                -- Display signcolumn in the focussed window only
-        winhighlight = false,             -- Auto highlighting for focussed/unfocussed windows
-      }
+        signcolumn = true, -- Display signcolumn in the focussed window only
+        winhighlight = false, -- Auto highlighting for focussed/unfocussed windows
+      },
     },
     keys = function()
       local keymap = {}
 
       local focusmap = function(direction)
-        table.insert(keymap,
-          {
-            "<leader>w" .. direction,
-            function()
-              require('focus').split_command(direction)
-            end,
-            mode = { "n" },
-            desc = string.format('Create or move to split (%s)', direction),
-          })
+        table.insert(keymap, {
+          "<leader>w" .. direction,
+          function()
+            require("focus").split_command(direction)
+          end,
+          mode = { "n" },
+          desc = string.format("Create or move to split (%s)", direction),
+        })
 
-        table.insert(keymap,
-          {
-            "<C-" .. direction .. ">",
-            "<cmd>wincmd " .. direction .. "<CR>",
-            mode = { "i", "n" },
-            desc = string.format('move to split (%s)', direction),
-          })
+        table.insert(keymap, {
+          "<C-" .. direction .. ">",
+          "<cmd>wincmd " .. direction .. "<CR>",
+          mode = { "i", "n" },
+          desc = string.format("move to split (%s)", direction),
+        })
       end
-      focusmap('h')
-      focusmap('j')
-      focusmap('k')
-      focusmap('l')
+      focusmap("h")
+      focusmap("j")
+      focusmap("k")
+      focusmap("l")
       return keymap
     end,
     lazy = false,
@@ -104,7 +102,7 @@ return {
     "akinsho/bufferline.nvim",
     event = "VeryLazy",
     keys = {
-      { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>",            desc = "Toggle pin" },
+      { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle pin" },
       { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete non-pinned buffers" },
     },
     opts = {
@@ -113,8 +111,7 @@ return {
         always_show_bufferline = false,
         diagnostics_indicator = function(_, _, diag)
           local icons = require("config.ui.icons").diagnostics
-          local ret = (diag.error and icons.Error .. diag.error .. " " or "")
-              .. (diag.warning and icons.Warn .. diag.warning or "")
+          local ret = (diag.error and icons.Error .. diag.error .. " " or "") .. (diag.warning and icons.Warn .. diag.warning or "")
           return vim.trim(ret)
         end,
         offsets = {
@@ -164,33 +161,33 @@ return {
             },
           },
 
-
           lualine_x = {
-            -- stylua: ignore
+            -- -- stylua: ignore
+            -- --
             --
-
-            {
-              function() return require("noice").api.status.command.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
-              color = fg("Statement")
-            },
-            -- stylua: ignore
-            {
-              function() return require("noice").api.status.mode.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
-              color = fg("Constant"),
-            },
+            -- {
+            --   function() return require("noice").api.status.command.get() end,
+            --   cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
+            --   color = fg("Statement")
+            -- },
+            -- -- stylua: ignore
+            -- {
+            --   function() return require("noice").api.status.mode.get() end,
+            --   cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
+            --   color = fg("Constant"),
+            -- },
             { require("lazy.status").updates, cond = require("lazy.status").has_updates, color = fg("Special") },
             {
-              'lsp_status',
-              icon = '', -- f013
+              "lsp_status",
+              icon = "", -- f013
               symbols = {
                 -- Standard unicode symbols to cycle through for LSP progress:
-                spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
+                spinner = require("config.ui.icons").simple,
                 -- Standard unicode symbol for when LSP is done:
-                done = '✓',
+                -- done = "✓",
+                done = "",
                 -- Delimiter inserted between LSP names:
-                separator = ' ',
+                separator = " ",
               },
               -- List of LSP names to ignore (e.g., `null-ls`):
               ignore_lsp = {},
@@ -215,7 +212,7 @@ return {
             },
           },
           lualine_y = {
-            { "progress", separator = " ",                  padding = { left = 1, right = 0 } },
+            { "progress", separator = " ", padding = { left = 1, right = 0 } },
             { "location", padding = { left = 0, right = 1 } },
           },
           lualine_z = {
@@ -335,9 +332,9 @@ return {
       ---@field formats table<string, snacks.dashboard.Text|fun(item:snacks.dashboard.Item, ctx:snacks.dashboard.Format.ctx):snacks.dashboard.Text>
       dashboard = {
         width = 60,
-        row = nil,                                                                   -- dashboard position. nil for center
-        col = nil,                                                                   -- dashboard position. nil for center
-        pane_gap = 4,                                                                -- empty columns between vertical panes
+        row = nil, -- dashboard position. nil for center
+        col = nil, -- dashboard position. nil for center
+        pane_gap = 4, -- empty columns between vertical panes
         autokeys = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", -- autokey sequence
         -- These settings are used by some built-in sections
         preset = {
@@ -359,7 +356,7 @@ return {
             { icon = " ", key = "q", desc = "Quit", action = ":qa" },
           },
           -- Used by the `header` section
-          header = [[]]
+          header = [[]],
         },
         -- item field formatters
         formats = {
@@ -426,12 +423,61 @@ return {
       scroll = { enabled = false },
       statuscolumn = { enabled = true },
       words = { enabled = true },
+
+      terminal = {
+        enabled = true,
+        bo = {
+          filetype = "snacks_terminal",
+        },
+        wo = {},
+        keys = {
+          q = "hide",
+
+          gf = function(self)
+            local f = vim.fn.findfile(vim.fn.expand("<cfile>"), "**")
+            if f == "" then
+              Snacks.notify.warn("No file under cursor")
+            else
+              self:hide()
+              vim.schedule(function()
+                vim.cmd("e " .. f)
+              end)
+            end
+          end,
+
+          term_normal = {
+            "<esc>",
+            function(self)
+              self.esc_timer = self.esc_timer or (vim.uv or vim.loop).new_timer()
+              if self.esc_timer:is_active() then
+                self.esc_timer:stop()
+                vim.cmd("stopinsert")
+              else
+                self.esc_timer:start(200, 0, function() end)
+                return "<esc>"
+              end
+            end,
+            mode = "t",
+            expr = true,
+            desc = "Double escape to normal mode",
+          },
+        },
+      },
+
       styles = {
         notification = {
           -- wo = { wrap = true } -- Wrap notifications
-        }
-      }
+        },
+        terminal = {
+          position = "float",
+          backdrop = 90,
+          height = 0.9,
+          width = 0.9,
+          zindex = 50,
+        },
+      },
     },
+    -- stylua: ignore
     keys = {
       -- Top Pickers & Explorer
       { "<leader><space>", function() Snacks.picker.smart() end,                                   desc = "Smart Find Files" },
@@ -501,10 +547,11 @@ return {
       { "<leader>gB",      function() Snacks.gitbrowse() end,                                      desc = "Git Browse",               mode = { "n", "v" } },
       { "<leader>gg",      function() Snacks.lazygit() end,                                        desc = "Lazygit" },
       { "<leader>un",      function() Snacks.notifier.hide() end,                                  desc = "Dismiss All Notifications" },
-      -- { "<c-/>",           function() Snacks.terminal() end,                                       desc = "Toggle Terminal" },
+      { "<c-/>",           function() Snacks.terminal() end,                                       desc = "Toggle Terminal" },
       { "<c-_>",           function() Snacks.terminal() end,                                       desc = "which_key_ignore" },
       { "]]",              function() Snacks.words.jump(vim.v.count1) end,                         desc = "Next Reference",           mode = { "n", "t" } },
       { "[[",              function() Snacks.words.jump(-vim.v.count1) end,                        desc = "Prev Reference",           mode = { "n", "t" } },
+      { "<leader>D",       function() Snacks.dashboard.open() end,                                   desc = "Dashboard" },
       {
         "<leader>N",
         desc = "Neovim News",
@@ -538,18 +585,30 @@ return {
           vim.print = _G.dd -- Override print to use snacks for `:=` command
 
           -- Create some toggle mappings
-          Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
-          Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
-          Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
-          Snacks.toggle.diagnostics():map("<leader>ud")
-          Snacks.toggle.line_number():map("<leader>ul")
-          Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map(
-            "<leader>uc")
-          Snacks.toggle.treesitter():map("<leader>uT")
-          Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
-          Snacks.toggle.inlay_hints():map("<leader>uh")
-          Snacks.toggle.indent():map("<leader>ug")
-          Snacks.toggle.dim():map("<leader>uD")
+          Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>ts")
+          Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
+          Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>tL")
+          Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>tb")
+          Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map("<leader>tc")
+          Snacks.toggle
+            .new({
+              id = "autoformat",
+              name = "Format on save",
+              get = function()
+                return vim.g.autoformat
+              end,
+              set = function(state)
+                vim.g.autoformat = state
+              end,
+            })
+            :map("<leader>tt")
+
+          Snacks.toggle.line_number():map("<leader>tl")
+          Snacks.toggle.treesitter():map("<leader>tT")
+          Snacks.toggle.inlay_hints():map("<leader>th")
+          Snacks.toggle.indent():map("<leader>tg")
+          Snacks.toggle.dim():map("<leader>tD")
+          Snacks.toggle.diagnostics():map("<leader>td")
         end,
       })
     end,
@@ -566,6 +625,6 @@ return {
       --   `nvim-notify` is only needed, if you want to use the notification view.
       --   If not available, we use `mini` as the fallback
       "rcarriga/nvim-notify",
-    }
+    },
   },
 }

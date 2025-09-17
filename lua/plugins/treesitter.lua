@@ -68,6 +68,7 @@ return {
         "java",
         "javascript",
         "jsdoc",
+        "json",
         "jsonc",
         "latex",
         "lua",

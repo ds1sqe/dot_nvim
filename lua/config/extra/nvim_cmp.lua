@@ -1,5 +1,5 @@
 local M = function()
-  local cmp  = require("cmp")
+  local cmp = require("cmp")
   local util = require("util")
   return {
     completion = {
@@ -22,19 +22,20 @@ local M = function()
 
     sources = cmp.config.sources({
       { name = "nvim_lsp" },
+      { name = "lazydev" },
       { name = "luasnip" },
       { name = "buffer" },
       { name = "path" },
       { name = "emoji" },
       { name = "neorg" },
       { name = "nvim_lsp_signature_help" },
-      { name = "dictionary",             keyword_length = 2 },
+      { name = "dictionary", keyword_length = 2 },
     }),
 
     formatting = {
       fields = { "kind", "abbr", "menu" },
       format = function(entry, item)
-        local icons = require("config.icons").kinds
+        local icons = require("config.ui.icons").kinds
         if icons[item.kind] then
           item.kind = icons[item.kind] .. " " .. item.kind
         end

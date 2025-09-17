@@ -5,8 +5,6 @@ M._keys = nil
 
 ---@return (LazyKeys|{has?:string})[]
 function M.get()
-  local format = require("config.lsp.format").format
-  local toggle = require("config.lsp.format").toggle
   if not M._keys then
     ---@class PluginLspKeys
     -- stylua: ignore
@@ -14,17 +12,14 @@ function M.get()
       { "<leader>cd", vim.diagnostic.open_float,         desc = "Line Diagnostics" },
       { "<leader>cl", "<cmd>LspInfo<cr>",                desc = "Lsp Info" },
       { "K",          vim.lsp.buf.hover,                 desc = "Hover" },
-      { "gk",         vim.lsp.buf.signature_help,        desc = "Signature Help",         has = "signatureHelp" },
+      { "gk",         vim.lsp.buf.signature_help,        desc = "Signature Help",  has = "signatureHelp" },
       { "]d",         M.diagnostic_goto(true),           desc = "Next Diagnostic" },
       { "[d",         M.diagnostic_goto(false),          desc = "Prev Diagnostic" },
       { "]e",         M.diagnostic_goto(true, "ERROR"),  desc = "Next Error" },
       { "[e",         M.diagnostic_goto(false, "ERROR"), desc = "Prev Error" },
       { "]w",         M.diagnostic_goto(true, "WARN"),   desc = "Next Warning" },
       { "[w",         M.diagnostic_goto(false, "WARN"),  desc = "Prev Warning" },
-      { "<leader>ca", vim.lsp.buf.code_action,           desc = "Code Action",            mode = { "n", "v" },       has = "codeAction" },
-      { "<leader>cf", format,                            desc = "Format Document",        has = "documentFormatting" },
-      { "<leader>cf", format,                            desc = "Format Range",           mode = "v",                has = "documentRangeFormatting" },
-      { "<leader>tf", toggle,                            desc = "Toggle Format document", has = "documentFormatting" },
+      { "<leader>ca", vim.lsp.buf.code_action,           desc = "Code Action",     mode = { "n", "v" },  has = "codeAction" },
     }
     if require("util").has("inc-rename.nvim") then
       M._keys[#M._keys + 1] = {

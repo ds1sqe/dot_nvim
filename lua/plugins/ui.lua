@@ -112,7 +112,7 @@ return {
         diagnostics = "nvim_lsp",
         always_show_bufferline = false,
         diagnostics_indicator = function(_, _, diag)
-          local icons = require("config.icons").diagnostics
+          local icons = require("config.ui.icons").diagnostics
           local ret = (diag.error and icons.Error .. diag.error .. " " or "")
               .. (diag.warning and icons.Warn .. diag.warning or "")
           return vim.trim(ret)
@@ -133,13 +133,13 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
-    opts = function(plugin)
-      local icons = require("config.icons")
+    opts = function()
+      local icons = require("config.ui.icons")
 
       local function fg(name)
         return function()
           ---@type {foreground?:number}?
-          local hl = vim.api.nvim_get_hl_by_name(name, true)
+          local hl = vim.api.nvim_get_hl(0, { name = name })
           return hl and hl.foreground and { fg = string.format("#%06x", hl.foreground) }
         end
       end
@@ -154,16 +154,8 @@ return {
           lualine_a = { "mode" },
           lualine_b = { "branch" },
           lualine_c = {
-            {
-              "diagnostics",
-              symbols = {
-                error = icons.diagnostics.Error,
-                warn = icons.diagnostics.Warn,
-                info = icons.diagnostics.Info,
-                hint = icons.diagnostics.Hint,
-              },
-            },
-            { "filetype", icon_only = false, separator = "", padding = { left = 1, right = 0 } },
+
+            { "filetype", icon_only = false, padding = { left = 1, right = 1 } },
             { "filename", path = 1, symbols = { modified = "  ", readonly = "", unnamed = "" } },
             -- stylua: ignore
             {
@@ -171,8 +163,12 @@ return {
               cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
             },
           },
+
+
           lualine_x = {
             -- stylua: ignore
+            --
+
             {
               function() return require("noice").api.status.command.get() end,
               cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
@@ -185,6 +181,30 @@ return {
               color = fg("Constant"),
             },
             { require("lazy.status").updates, cond = require("lazy.status").has_updates, color = fg("Special") },
+            {
+              'lsp_status',
+              icon = '', -- f013
+              symbols = {
+                -- Standard unicode symbols to cycle through for LSP progress:
+                spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
+                -- Standard unicode symbol for when LSP is done:
+                done = '✓',
+                -- Delimiter inserted between LSP names:
+                separator = ' ',
+              },
+              -- List of LSP names to ignore (e.g., `null-ls`):
+              ignore_lsp = {},
+            },
+
+            {
+              "diagnostics",
+              symbols = {
+                error = icons.diagnostics.Error,
+                warn = icons.diagnostics.Warn,
+                info = icons.diagnostics.Info,
+                hint = icons.diagnostics.Hint,
+              },
+            },
             {
               "diff",
               symbols = {
@@ -286,7 +306,7 @@ return {
         separator = " ",
         highlight = true,
         depth_limit = 5,
-        icons = require("config.icons").kinds,
+        icons = require("config.ui.icons").kinds,
       }
     end,
   },

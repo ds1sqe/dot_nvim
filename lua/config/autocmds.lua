@@ -45,7 +45,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
-
 -- go to last loc when opening a buffer
 vim.api.nvim_create_autocmd("BufReadPost", {
   group = augroup("last_loc"),
@@ -72,6 +71,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "spectre_panel",
     "startuptime",
     "tsplayground",
+    "dapui_hover",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
@@ -87,4 +87,33 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.wrap = true
     vim.opt_local.spell = true
   end,
+})
+
+local ignore_filetypes = { "neo-tree" }
+local ignore_buftypes = { "nofile", "prompt", "popup", "dap_repl", "dapui_hover", "dapui_console" }
+
+local augroup = vim.api.nvim_create_augroup("FocusDisable", { clear = true })
+
+vim.api.nvim_create_autocmd("WinEnter", {
+  group = augroup,
+  callback = function(_)
+    if vim.tbl_contains(ignore_buftypes, vim.bo.buftype) then
+      vim.w.focus_disable = true
+    else
+      vim.w.focus_disable = false
+    end
+  end,
+  desc = "Disable focus autoresize for BufType",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup,
+  callback = function(_)
+    if vim.tbl_contains(ignore_filetypes, vim.bo.filetype) then
+      vim.b.focus_disable = true
+    else
+      vim.b.focus_disable = false
+    end
+  end,
+  desc = "Disable focus autoresize for FileType",
 })

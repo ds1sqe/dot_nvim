@@ -19,6 +19,7 @@ Blacklist = {
         "dapui_breakpoints",
         "dapui_console",
         "dapui_controls",
+        "dapui_repl",
         "dapui_hover",
         "dapui_scopes",
         "dapui_stacks",

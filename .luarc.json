@@ -5,6 +5,7 @@
     "$XDG_DATA_HOME/nvim/lazy",
     "${3rd}/luv/library",
     "~/.local/share/nvim/lazy",
-    "~/.local/share/nvim/snacks"
+    "~/.local/share/nvim/snacks",
+    "nvim-dap-ui"
   ]
 }

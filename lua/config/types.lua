@@ -1,4 +1,4 @@
-local blacklist = {
+Blacklist = {
     buftypes = {
         "terminal",
         "doc",
@@ -16,6 +16,13 @@ local blacklist = {
         "noice",
         "prompt",
         "TelescopePrompt",
+        "dapui_breakpoints",
+        "dapui_console",
+        "dapui_controls",
+        "dapui_hover",
+        "dapui_scopes",
+        "dapui_stacks",
+        "dapui_watches",
     },
 }
 

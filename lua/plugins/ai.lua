@@ -12,7 +12,7 @@ return {
     ---@type avante.Config
     opts = {
       instructions_file = "instructions.md",
-      provider = "claude",
+      provider = "openai",
       providers = {
         claude = {
           endpoint = "https://api.anthropic.com",
@@ -23,12 +23,23 @@ return {
             max_tokens = 20480,
           },
         },
+        openai = {
+          endpoint = "https://api.openai.com/v1",
+          model = "gpt-4o",
+          timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
+          context_window = 128000, -- Number of tokens to send to the model for context
+          extra_request_body = {
+            temperature = 0.75,
+            max_completion_tokens = 16384, -- Increase this to include reasoning tokens (for reasoning models)
+            reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+          },
+        },
       },
-      auto_suggestions_provider = "claude",
+      -- auto_suggestions_provider = "claude",
       behaviour = {
         auto_suggestions = false, -- Experimental stage
         auto_set_highlight_group = false,
-        auto_set_keymaps = false,
+        auto_set_keymaps = true,
         auto_apply_diff_after_generation = false,
         support_paste_from_clipboard = false,
         minimize_diff = true,                  -- Whether to remove unchanged lines when applying a code block

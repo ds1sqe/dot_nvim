@@ -13,9 +13,9 @@ return {
         enable = true, -- Enable or disable auto-resizing of splits
         width = 0, -- Force width for the focused window
         height = 0, -- Force height for the focused window
-        minwidth = 20, -- Force minimum width for the unfocused window
-        minheight = 0, -- Force minimum height for the unfocused window
-        focusedwindow_minwidth = 80, --Force minimum width for the focused window
+        minwidth = 40, -- Force minimum width for the unfocused window
+        minheight = 10, -- Force minimum height for the unfocused window
+        focusedwindow_minwidth = 0, --Force minimum width for the focused window
         focusedwindow_minheight = 0, --Force minimum height for the focused window
         height_quickfix = 10, -- Set the height of quickfix panel
       },
@@ -312,7 +312,7 @@ return {
     event = "BufReadPost",
     config = function()
       require("cusorHl").setup({
-        ignore = {"doc", "help", "noice", "Telescope", "snacks_terminal", "snacks", "snacks_dashboard", "term" }
+        blacklist = Blacklist
       })
     end,
   },

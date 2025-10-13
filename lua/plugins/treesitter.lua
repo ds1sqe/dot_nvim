@@ -78,8 +78,6 @@ return {
         "meson",
         "ninja",
         "nix",
-        "norg",
-        "org",
         "php",
         "python",
         "query",

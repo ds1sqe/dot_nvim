@@ -3,7 +3,7 @@ M.setup = function()
   local dict = require("cmp_dictionary")
   dict.setup({
     paths = {
-      "/usr/share/dict/words",
+      "$HOME/.config/nvim/dict/en.dict",
     },
     exact_length = 2,
     first_case_insensitive = true,

@@ -4,4 +4,7 @@ return {
     require("clangd_extensions").setup(vim.tbl_deep_extend("force", clangd_ext_opts or {}, { server = opts }))
     return false
   end,
+  fsautocomplete  = function (_, opts)
+    vim.cmd('let g:fsharp#exclude_project_directories = [\'paket-files\', \'tests\']')
+  end,
 }

@@ -169,13 +169,13 @@ return {
       })
     end,
   },
-  {
-    "ds1sqe/InputMethodAutoChanger.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("imac").setup({ debug = false })
-    end,
-  },
+  -- {
+  --   "ds1sqe/InputMethodAutoChanger.nvim",
+  --   event = "VeryLazy",
+  --   config = function()
+  --     require("imac").setup({ debug = false })
+  --   end,
+  -- },
   {
     "windwp/nvim-ts-autotag",
     event = "InsertEnter",

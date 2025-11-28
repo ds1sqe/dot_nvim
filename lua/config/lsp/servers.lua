@@ -54,10 +54,10 @@ return {
   marksman = {},
 
   fsautocomplete = {
-    cmd = {
-      "/home/ds1sqe/proj/FsAutoComplete/src/FsAutoComplete/bin/Release/net6.0/fsautocomplete",
-      "--adaptive-lsp-server-enabled",
-    },
+    -- cmd = {
+    --   "/home/ds1sqe/proj/FsAutoComplete/src/FsAutoComplete/bin/Release/net6.0/fsautocomplete",
+    --   "--adaptive-lsp-server-enabled",
+    -- },
     settings = {
       FSharp = {
         EnableReferenceCodeLens = true,

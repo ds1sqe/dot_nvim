@@ -1,6 +1,53 @@
-return {
-  { "nvim-treesitter/playground", cmd = "TSPlaygroundToggle" },
+local PARSERS = {
+  "bash",
+  "c",
+  "cmake",
+  "c_sharp",
+  "cpp",
+  "css",
+  "diff",
+  "fish",
+  "gitignore",
+  "go",
+  "graphql",
+  "html",
+  "http",
+  "java",
+  "javascript",
+  "jsdoc",
+  "json",
+  "json5",
+  "jsonc",
+  "latex",
+  "lua",
+  "luadoc",
+  "markdown",
+  "markdown_inline",
+  "meson",
+  "ninja",
+  "nix",
+  "php",
+  "python",
+  "query",
+  "regex",
+  "rust",
+  "scss",
+  "sql",
+  "svelte",
+  "teal",
+  "toml",
+  "tsx",
+  "typescript",
+  "vhs",
+  "vim",
+  "vue",
+  "wgsl",
+  "yaml",
+}
 
+local INDENT_DISABLED = { python = true }
+
+return {
   {
     "mfussenegger/nvim-treehopper",
     keys = { { "m", mode = { "o", "x" } } },
@@ -17,127 +64,54 @@ return {
     event = "BufReadPre",
     config = true,
   },
+
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
+    lazy = false,
+  },
+
   {
     "nvim-treesitter/nvim-treesitter",
-    version = false, -- last release is way too old and doesn't work on Windows
+    branch = "main",
+    lazy = false,
     build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
-    dependencies = {
-      {
-        "nvim-treesitter/nvim-treesitter-textobjects",
-        init = function()
-          -- PERF: no need to load the plugin, if we only need its queries for mini.ai
-          local plugin = require("lazy.core.config").spec.plugins["nvim-treesitter"]
-          local opts = require("lazy.core.plugin").values(plugin, "opts", false)
-          local enabled = false
-          if opts.textobjects then
-            for _, mod in ipairs({ "move", "select", "swap", "lsp_interop" }) do
-              if opts.textobjects[mod] and opts.textobjects[mod].enable then
-                enabled = true
-                break
-              end
-            end
+    keys = {
+      { "<C-space>", function() require("config.extra.ts_incsel").init() end,   mode = "n", desc = "Init selection" },
+      { "<C-space>", function() require("config.extra.ts_incsel").expand() end, mode = "x", desc = "Expand selection" },
+      { "<bs>",      function() require("config.extra.ts_incsel").shrink() end, mode = "x", desc = "Shrink selection" },
+    },
+    config = function()
+      local ts = require("nvim-treesitter")
+      ts.setup({})
+
+      local installed = {}
+      for _, name in ipairs(ts.get_installed and ts.get_installed("parsers") or {}) do
+        installed[name] = true
+      end
+      local missing = {}
+      for _, name in ipairs(PARSERS) do
+        if not installed[name] then
+          table.insert(missing, name)
+        end
+      end
+      if #missing > 0 then
+        ts.install(missing)
+      end
+
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("user_treesitter", { clear = true }),
+        callback = function(ev)
+          local ft = vim.bo[ev.buf].filetype
+          local lang = vim.treesitter.language.get_lang(ft) or ft
+          if not pcall(vim.treesitter.start, ev.buf, lang) then
+            return
           end
-          if not enabled then
-            require("lazy.core.loader").disable_rtp_plugin("nvim-treesitter-textobjects")
+          if not INDENT_DISABLED[lang] then
+            vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
           end
         end,
-      },
-    },
-    keys = {
-      { "<c-space>", desc = "Increment selection" },
-      { "<bs>",      desc = "Decrement selection", mode = "x" },
-    },
-    ---@type TSConfig
-    opts = {
-      ensure_installed = {
-        "bash",
-        "c",
-        "cmake",
-        -- "comment", -- comments are slowing down TS bigtime, so disable for now
-        "c_sharp",
-        "cpp",
-        "css",
-        "diff",
-        "fish",
-        "gitignore",
-        "go",
-        "graphql",
-        "html",
-        "http",
-        "java",
-        "javascript",
-        "jsdoc",
-        "json",
-        "jsonc",
-        "latex",
-        "lua",
-        "luadoc",
-        "markdown",
-        "markdown_inline",
-        "meson",
-        "ninja",
-        "nix",
-        "php",
-        "python",
-        "query",
-        "regex",
-        "rust",
-        "scss",
-        "sql",
-        "svelte",
-        "teal",
-        "toml",
-        "tsx",
-        "typescript",
-        "vhs",
-        "vim",
-        "vue",
-        "wgsl",
-        "yaml",
-        -- "wgsl",
-        "json",
-        -- "markdown",
-      },
-      highlight = { enable = true },
-      indent = { enable = true, disable = { "python" } },
-      -- indent = { enable = false },
-      query_linter = {
-        enable = true,
-        use_virtual_text = true,
-        lint_events = { "BufWrite", "CursorHold" },
-      },
-      playground = {
-        enable = true,
-        disable = {},
-        updatetime = 25,        -- Debounced time for highlighting nodes in the playground from source code
-        persist_queries = true, -- Whether the query persists across vim sessions
-        keybindings = {
-          toggle_query_editor = "o",
-          toggle_hl_groups = "i",
-          toggle_injected_languages = "t",
-          toggle_anonymous_nodes = "a",
-          toggle_language_display = "I",
-          focus_language = "f",
-          unfocus_language = "F",
-          update = "R",
-          goto_node = "<cr>",
-          show_help = "?",
-        },
-      },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<C-space>",
-          node_incremental = "<C-space>",
-          scope_incremental = "<nop>",
-          node_decremental = "<bs>",
-        },
-      },
-    },
-    ---@param opts TSConfig
-    config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
+      })
     end,
   },
 }

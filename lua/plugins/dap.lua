@@ -24,12 +24,39 @@ return {
         mode = "n",
         "<leader>dc",
         function()
-          if vim.fn.filereadable(".vscode/launch.json") then
-            require("dap.ext.vscode").load_launchjs()
-          end
           require("dap").continue()
         end,
         desc = "Start/Continue debug",
+      },
+      {
+        mode = "n",
+        "<leader>dl",
+        function()
+          -- Manually load launch.json (clears and reloads)
+          local dap = require("dap")
+          local root = require("util").get_root()
+          local launch_json = root .. "/.vscode/launch.json"
+
+          if vim.fn.filereadable(launch_json) == 1 then
+            -- Clear ALL configurations to prevent duplicates
+            for ft, _ in pairs(dap.configurations) do
+              dap.configurations[ft] = nil
+            end
+
+            require("dap.ext.vscode").load_launchjs(launch_json, {
+              cppdbg = { "c", "cpp" },
+              codelldb = { "c", "cpp", "rust" },
+              lldb = { "c", "cpp", "rust" },
+              coreclr = { "cs", "fsharp" },
+              debugpy = { "python" },
+              python = { "python" },
+            })
+            vim.notify("Loaded " .. launch_json, vim.log.levels.INFO)
+          else
+            vim.notify("No launch.json found at " .. launch_json, vim.log.levels.WARN)
+          end
+        end,
+        desc = "Load launch.json",
       },
 
       {
@@ -101,126 +128,58 @@ return {
 
       local dap = require("dap")
 
-      dap.configurations.lua = {
-        {
+      -- Adapter definitions (required for VS Code launch.json compatibility)
 
-          type = "nlua",
-          request = "attach",
-          name = "Attach to running Neovim instance",
-        },
-      }
-      dap.configurations.c = {
-        {
-          name = "Launch file",
-          type = "lldb",
-          request = "launch",
-          program = function()
-            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-          end,
-          cwd = "${workspaceFolder}",
-          stopOnEntry = false,
-        },
-      }
-      dap.configurations.cpp = dap.configurations.c
-      dap.configurations.rust = {
-        {
-          name = "Launch file",
-          type = "lldb",
-          request = "launch",
-          program = function()
-            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-          end,
-          cwd = "${workspaceFolder}",
-          stopOnEntry = false,
-          initCommands = function()
-            -- Find out where to look for the pretty printer Python module
-            local rustc_sysroot = vim.fn.trim(vim.fn.system("rustc --print sysroot"))
-
-            local script_import = 'command script import "' .. rustc_sysroot .. '/lib/rustlib/etc/lldb_lookup.py"'
-            local commands_file = rustc_sysroot .. "/lib/rustlib/etc/lldb_commands"
-
-            local commands = {}
-            local file = io.open(commands_file, "r")
-            if file then
-              for line in file:lines() do
-                table.insert(commands, line)
-              end
-              file:close()
-            end
-            table.insert(commands, 1, script_import)
-
-            return commands
-          end,
-        },
-      }
-
+      -- Neovim Lua debugging
       dap.adapters.nlua = function(callback, config)
         callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
       end
 
+      -- .NET (F#/C#) - coreclr is VS Code compatible
       dap.adapters.coreclr = {
         type = "executable",
         command = vim.fn.expand("$HOME/.local/share/nvim/mason/bin/netcoredbg"),
         args = { "--interpreter=vscode" },
       }
 
-      dap.configurations.fsharp = {
-        {
-          type = "coreclr",
-          name = "launch - Netcoredbg",
-          request = "launch",
-          program = function()
-            local conf = vim.fn.json_decode(vim.fn.readfile(".dap.conf.json"))
-            local path_to_dll = function()
-              if conf and conf.path then
-                return require("util").get_root() .. "/" .. conf.path
-              else
-                return vim.fn.input("Path to dll", vim.fn.getcwd(), "file")
-              end
-            end
-            return path_to_dll()
-          end,
-          args = function()
-            local conf = vim.fn.json_decode(vim.fn.readfile(".dap.conf.json"))
-            local get_args = function()
-              if conf and conf.args then
-                return vim.split(conf.args, " ")
-              else
-                local args_string = vim.fn.input("Input arguments: ")
-                return vim.split(args_string, " ")
-              end
-            end
-            return get_args()
-          end,
-          cwd = function()
-            local conf = vim.fn.json_decode(vim.fn.readfile(".dap.conf.json"))
-            local get_cwd = function()
-              if conf and conf.cwd then
-                return vim.fn.expand(conf.cwd)
-              else
-                return vim.fn.input("Target cwd:", vim.fn.getcwd())
-              end
-            end
-            return get_cwd()
-          end,
-          sync_with_nvim_tree = true,
-          env = { "VSTEST_HOST_DEBUG=1" },
-        },
-        {
-          type = "coreclr",
-          name = "ATTACH - Netcoredbg",
-          request = "attach",
-          processId = require("dap.utils").pick_process,
+      -- C/C++ via cpptools (VS Code compatible type: cppdbg)
+      dap.adapters.cppdbg = {
+        id = "cppdbg",
+        type = "executable",
+        command = vim.fn.expand("$HOME/.local/share/nvim/mason/bin/OpenDebugAD7"),
+      }
+
+      -- C/C++/Rust via codelldb (VS Code compatible type: codelldb)
+      dap.adapters.codelldb = {
+        type = "server",
+        port = "${port}",
+        executable = {
+          command = vim.fn.expand("$HOME/.local/share/nvim/mason/bin/codelldb"),
+          args = { "--port", "${port}" },
         },
       }
-      dap.configurations.cs = dap.configurations.fsharp
+
+      -- Fallback lldb adapter (for direct lldb-dap usage)
       dap.adapters.lldb = {
         type = "executable",
-        command = "/usr/bin/lldb-vscode", -- adjust as needed, must be absolute path
+        command = "/usr/bin/lldb-dap",
         name = "lldb",
       }
 
-      local dap, dapui = require("dap"), require("dapui")
+      -- Python debugpy alias (nvim-dap-python creates dap.adapters.python)
+      -- This allows VS Code's "debugpy" type to work
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "DapConfigLoaded",
+        once = true,
+        callback = function()
+          if dap.adapters.python then
+            dap.adapters.debugpy = dap.adapters.python
+          end
+        end,
+      })
+
+      -- DAP UI listeners
+      local dapui = require("dapui")
       dap.listeners.before.attach.dapui_config = function()
         dapui.open()
       end

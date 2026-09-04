@@ -315,7 +315,7 @@ return {
     event = "BufReadPost",
     config = function()
       require("cusorHl").setup({
-        blacklist = Blacklist
+        blacklist = Blacklist,
       })
     end,
   },
@@ -444,7 +444,7 @@ return {
             else
               self:hide()
               vim.schedule(function()
-                vim.cmd("e " .. f)
+                vim.cmd.edit(vim.fn.fnameescape(f))
               end)
             end
           end,

@@ -58,7 +58,7 @@ return {
       servers = require("config.lsp.servers"),
 
       ---@type table<string, fun(server:string, opts:lspconfig.options):boolean?>
-      setup = require("config.lsp.setups")
+      setup = require("config.lsp.setups"),
     },
     ---@param opts PluginLspOpts
     config = function(plugin, opts)
@@ -81,10 +81,6 @@ return {
       local mlsp = require("mason-lspconfig")
       local available = mlsp.get_available_servers()
 
-      local ensure_installed = {} ---@type string[]
-      require("mason-lspconfig").setup({ ensure_installed = ensure_installed })
-
-
       local function setup(server)
         local server_opts = vim.tbl_deep_extend("force", {
           capabilities = vim.deepcopy(capabilities),
@@ -101,18 +97,25 @@ return {
         vim.lsp.config(server, server_opts)
       end
 
-
+      local ensure_installed = {} ---@type string[]
       for server, server_opts in pairs(servers) do
-        if server_opts and (server_opts.skip_default_setup ~= nil) and server_opts.skip_default_setup ~= true then
+        if server_opts and server_opts.skip_default_setup ~= true then
           server_opts = server_opts == true and {} or server_opts
-          -- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
+          setup(server)
+          vim.lsp.enable(server, false)
           if server_opts.mason == false or not vim.tbl_contains(available, server) then
-            setup(server)
+            vim.lsp.enable(server)
           else
             ensure_installed[#ensure_installed + 1] = server
           end
         end
       end
+
+      mlsp.setup({
+        ensure_installed = ensure_installed,
+        automatic_enable = false,
+      })
+      vim.lsp.enable(ensure_installed)
     end,
   },
 }

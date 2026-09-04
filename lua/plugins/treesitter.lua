@@ -17,7 +17,6 @@ local PARSERS = {
   "jsdoc",
   "json",
   "json5",
-  "jsonc",
   "latex",
   "lua",
   "luadoc",
@@ -77,9 +76,30 @@ return {
     lazy = false,
     build = ":TSUpdate",
     keys = {
-      { "<C-space>", function() require("config.extra.ts_incsel").init() end,   mode = "n", desc = "Init selection" },
-      { "<C-space>", function() require("config.extra.ts_incsel").expand() end, mode = "x", desc = "Expand selection" },
-      { "<bs>",      function() require("config.extra.ts_incsel").shrink() end, mode = "x", desc = "Shrink selection" },
+      {
+        "<C-space>",
+        function()
+          require("config.extra.ts_incsel").init()
+        end,
+        mode = "n",
+        desc = "Init selection",
+      },
+      {
+        "<C-space>",
+        function()
+          require("config.extra.ts_incsel").expand()
+        end,
+        mode = "x",
+        desc = "Expand selection",
+      },
+      {
+        "<bs>",
+        function()
+          require("config.extra.ts_incsel").shrink()
+        end,
+        mode = "x",
+        desc = "Shrink selection",
+      },
     },
     config = function()
       local ts = require("nvim-treesitter")

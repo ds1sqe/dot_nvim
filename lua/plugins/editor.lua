@@ -80,128 +80,127 @@ return {
     "nvim-telescope/telescope.nvim",
     cmd = "Telescope",
     version = false, -- telescope did only one release, so use HEAD for now
-    keys = {
-      opts = {
-        defaults = {
-          prompt_prefix = " ",
-          selection_caret = " ",
-          mappings = {
-            i = {
-              ["<c-t>"] = function(...)
-                return require("trouble.providers.telescope").open_with_trouble(...)
-              end,
-              ["<a-t>"] = function(...)
-                return require("trouble.providers.telescope").open_selected_with_trouble(...)
-              end,
-              ["<a-i>"] = function()
-                Util.telescope("find_files", { no_ignore = true })()
-              end,
-              ["<a-h>"] = function()
-                Util.telescope("find_files", { hidden = true })()
-              end,
-              ["<C-Down>"] = function(...)
-                return require("telescope.actions").cycle_history_next(...)
-              end,
-              ["<C-Up>"] = function(...)
-                return require("telescope.actions").cycle_history_prev(...)
-              end,
-              ["<C-f>"] = function(...)
-                return require("telescope.actions").preview_scrolling_down(...)
-              end,
-              ["<C-b>"] = function(...)
-                return require("telescope.actions").preview_scrolling_up(...)
-              end,
-            },
-            n = {
-              ["q"] = function(...)
-                return require("telescope.actions").close(...)
-              end,
-            },
+    opts = {
+      defaults = {
+        prompt_prefix = " ",
+        selection_caret = " ",
+        mappings = {
+          i = {
+            ["<c-t>"] = function(...)
+              return require("trouble.providers.telescope").open_with_trouble(...)
+            end,
+            ["<a-t>"] = function(...)
+              return require("trouble.providers.telescope").open_selected_with_trouble(...)
+            end,
+            ["<a-i>"] = function()
+              Util.telescope("find_files", { no_ignore = true })()
+            end,
+            ["<a-h>"] = function()
+              Util.telescope("find_files", { hidden = true })()
+            end,
+            ["<C-Down>"] = function(...)
+              return require("telescope.actions").cycle_history_next(...)
+            end,
+            ["<C-Up>"] = function(...)
+              return require("telescope.actions").cycle_history_prev(...)
+            end,
+            ["<C-f>"] = function(...)
+              return require("telescope.actions").preview_scrolling_down(...)
+            end,
+            ["<C-b>"] = function(...)
+              return require("telescope.actions").preview_scrolling_up(...)
+            end,
+          },
+          n = {
+            ["q"] = function(...)
+              return require("telescope.actions").close(...)
+            end,
           },
         },
       },
     },
+  },
 
-    -- easily jump to any location and enhanced f/t motions for Leap
-    {
-      "ggandor/flit.nvim",
-      keys = function()
-        ---@type LazyKeys[]
-        local ret = {}
-        for _, key in ipairs({ "f", "F", "t", "T" }) do
-          ret[#ret + 1] = { key, mode = { "n", "x", "o" }, desc = key }
-        end
-        return ret
-      end,
-      opts = { labeled_modes = "nx" },
+  -- easily jump to any location and enhanced f/t motions for Leap
+  {
+    "ggandor/flit.nvim",
+    keys = function()
+      ---@type LazyKeys[]
+      local ret = {}
+      for _, key in ipairs({ "f", "F", "t", "T" }) do
+        ret[#ret + 1] = { key, mode = { "n", "x", "o" }, desc = key }
+      end
+      return ret
+    end,
+    opts = { labeled_modes = "nx" },
+  },
+  {
+    "ggandor/leap.nvim",
+    keys = {
+      { "s", mode = { "n", "x", "o" }, desc = "Leap forward to" },
+      { "S", mode = { "n", "x", "o" }, desc = "Leap backward to" },
+      { "gs", mode = { "n", "x", "o" }, desc = "Leap from windows" },
     },
-    {
-      "ggandor/leap.nvim",
-      keys = {
-        { "s", mode = { "n", "x", "o" }, desc = "Leap forward to" },
-        { "S", mode = { "n", "x", "o" }, desc = "Leap backward to" },
-        { "gs", mode = { "n", "x", "o" }, desc = "Leap from windows" },
+    config = function(_, opts)
+      local leap = require("leap")
+      for k, v in pairs(opts) do
+        leap.opts[k] = v
+      end
+      leap.add_default_mappings(true)
+      vim.keymap.del({ "x", "o" }, "x")
+      vim.keymap.del({ "x", "o" }, "X")
+    end,
+  },
+
+  -- which-key
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      plugins = { spelling = true },
+    },
+    config = function(_, opts)
+      local wk = require("which-key")
+      wk.setup(opts)
+      local keymaps = {
+        mode = { "n", "v" },
+        { "]", group = "next" },
+        { "[", group = "prev" },
+        { "<leader><tab>", group = "tabs" },
+        { "<leader>b", group = "buffer" },
+        { "<leader>c", group = "code" },
+        { "<leader>f", group = "file/find" },
+        { "<leader>g", group = "git" },
+        { "<leader>gh", group = "hunks" },
+        { "<leader>q", group = "quit/session" },
+        { "<leader>s", group = "search" },
+        { "<leader>u", group = "ui" },
+        { "<leader>w", group = "windows" },
+        { "<leader>x", group = "diagnostics/quickfix" },
+      }
+      wk.add(keymaps)
+    end,
+  },
+
+  -- git signs
+  {
+    "lewis6991/gitsigns.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    opts = {
+      signs = {
+        add = { text = "▎" },
+        change = { text = "▎" },
+        delete = { text = "" },
+        topdelete = { text = "" },
+        changedelete = { text = "▎" },
+        untracked = { text = "▎" },
       },
-      config = function(_, opts)
-        local leap = require("leap")
-        for k, v in pairs(opts) do
-          leap.opts[k] = v
+      on_attach = function(buffer)
+        local gs = package.loaded.gitsigns
+
+        local function map(mode, l, r, desc)
+          vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
         end
-        leap.add_default_mappings(true)
-        vim.keymap.del({ "x", "o" }, "x")
-        vim.keymap.del({ "x", "o" }, "X")
-      end,
-    },
-
-    -- which-key
-    {
-      "folke/which-key.nvim",
-      event = "VeryLazy",
-      opts = {
-        plugins = { spelling = true },
-      },
-      config = function(_, opts)
-        local wk = require("which-key")
-        wk.setup(opts)
-        local keymaps = {
-          mode = { "n", "v" },
-          { "]", group = "next" },
-          { "[", group = "prev" },
-          { "<leader><tab>", group = "tabs" },
-          { "<leader>b", group = "buffer" },
-          { "<leader>c", group = "code" },
-          { "<leader>f", group = "file/find" },
-          { "<leader>g", group = "git" },
-          { "<leader>gh", group = "hunks" },
-          { "<leader>q", group = "quit/session" },
-          { "<leader>s", group = "search" },
-          { "<leader>u", group = "ui" },
-          { "<leader>w", group = "windows" },
-          { "<leader>x", group = "diagnostics/quickfix" },
-        }
-        wk.add(keymaps)
-      end,
-    },
-
-    -- git signs
-    {
-      "lewis6991/gitsigns.nvim",
-      event = { "BufReadPre", "BufNewFile" },
-      opts = {
-        signs = {
-          add = { text = "▎" },
-          change = { text = "▎" },
-          delete = { text = "" },
-          topdelete = { text = "" },
-          changedelete = { text = "▎" },
-          untracked = { text = "▎" },
-        },
-        on_attach = function(buffer)
-          local gs = package.loaded.gitsigns
-
-          local function map(mode, l, r, desc)
-            vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
-          end
 
         -- stylua: ignore start
         map("n", "]h", gs.next_hunk, "Next Hunk")
@@ -216,93 +215,93 @@ return {
         map("n", "<leader>ghd", gs.diffthis, "Diff This")
         map("n", "<leader>ghD", function() gs.diffthis("~") end, "Diff This ~")
         map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
-        end,
-      },
-    },
-
-    -- references
-    {
-      "RRethy/vim-illuminate",
-      event = { "BufReadPost", "BufNewFile" },
-      opts = { delay = 200 },
-      config = function(_, opts)
-        require("illuminate").configure(opts)
-
-        local function map(key, dir, buffer)
-          vim.keymap.set("n", key, function()
-            require("illuminate")["goto_" .. dir .. "_reference"](false)
-          end, { desc = dir:sub(1, 1):upper() .. dir:sub(2) .. " Reference", buffer = buffer })
-        end
-
-        map("]]", "next")
-        map("[[", "prev")
-
-        -- also set it after loading ftplugins, since a lot overwrite [[ and ]]
-        vim.api.nvim_create_autocmd("FileType", {
-          callback = function()
-            local buffer = vim.api.nvim_get_current_buf()
-            map("]]", "next", buffer)
-            map("[[", "prev", buffer)
-          end,
-        })
       end,
-      keys = {
-        { "]]", desc = "Next Reference" },
-        { "[[", desc = "Prev Reference" },
-      },
     },
+  },
 
-    -- buffer remove
-    {
-      "echasnovski/mini.bufremove",
+  -- references
+  {
+    "RRethy/vim-illuminate",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = { delay = 200 },
+    config = function(_, opts)
+      require("illuminate").configure(opts)
+
+      local function map(key, dir, buffer)
+        vim.keymap.set("n", key, function()
+          require("illuminate")["goto_" .. dir .. "_reference"](false)
+        end, { desc = dir:sub(1, 1):upper() .. dir:sub(2) .. " Reference", buffer = buffer })
+      end
+
+      map("]]", "next")
+      map("[[", "prev")
+
+      -- also set it after loading ftplugins, since a lot overwrite [[ and ]]
+      vim.api.nvim_create_autocmd("FileType", {
+        callback = function()
+          local buffer = vim.api.nvim_get_current_buf()
+          map("]]", "next", buffer)
+          map("[[", "prev", buffer)
+        end,
+      })
+    end,
+    keys = {
+      { "]]", desc = "Next Reference" },
+      { "[[", desc = "Prev Reference" },
+    },
+  },
+
+  -- buffer remove
+  {
+    "echasnovski/mini.bufremove",
     -- stylua: ignore
     keys = {
       { "<leader>bd", function() require("mini.bufremove").delete(0, false) end, desc = "Delete Buffer" },
       { "<leader>bD", function() require("mini.bufremove").delete(0, true) end,  desc = "Delete Buffer (Force)" },
     },
-    },
+  },
 
-    -- better diagnostics list and others
-    {
-      "folke/trouble.nvim",
-      cmd = { "TroubleToggle", "Trouble" },
-      opts = { use_diagnostic_signs = true },
-      keys = {
-        { "<leader>xx", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
-        { "<leader>xX", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
-        { "<leader>xL", "<cmd>TroubleToggle loclist<cr>", desc = "Location List (Trouble)" },
-        { "<leader>xQ", "<cmd>TroubleToggle quickfix<cr>", desc = "Quickfix List (Trouble)" },
-        {
-          "[q",
-          function()
-            if require("trouble").is_open() then
-              require("trouble").previous({ skip_groups = true, jump = true })
-            else
-              vim.cmd.cprev()
-            end
-          end,
-          desc = "Previous trouble/quickfix item",
-        },
-        {
-          "]q",
-          function()
-            if require("trouble").is_open() then
-              require("trouble").next({ skip_groups = true, jump = true })
-            else
-              vim.cmd.cnext()
-            end
-          end,
-          desc = "Next trouble/quickfix item",
-        },
+  -- better diagnostics list and others
+  {
+    "folke/trouble.nvim",
+    cmd = { "TroubleToggle", "Trouble" },
+    opts = { use_diagnostic_signs = true },
+    keys = {
+      { "<leader>xx", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
+      { "<leader>xX", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
+      { "<leader>xL", "<cmd>TroubleToggle loclist<cr>", desc = "Location List (Trouble)" },
+      { "<leader>xQ", "<cmd>TroubleToggle quickfix<cr>", desc = "Quickfix List (Trouble)" },
+      {
+        "[q",
+        function()
+          if require("trouble").is_open() then
+            require("trouble").previous({ skip_groups = true, jump = true })
+          else
+            vim.cmd.cprev()
+          end
+        end,
+        desc = "Previous trouble/quickfix item",
+      },
+      {
+        "]q",
+        function()
+          if require("trouble").is_open() then
+            require("trouble").next({ skip_groups = true, jump = true })
+          else
+            vim.cmd.cnext()
+          end
+        end,
+        desc = "Next trouble/quickfix item",
       },
     },
+  },
 
-    -- todo comments
-    {
-      "folke/todo-comments.nvim",
-      cmd = { "TodoTrouble", "TodoTelescope" },
-      event = { "BufReadPost", "BufNewFile" },
-      config = true,
+  -- todo comments
+  {
+    "folke/todo-comments.nvim",
+    cmd = { "TodoTrouble", "TodoTelescope" },
+    event = { "BufReadPost", "BufNewFile" },
+    config = true,
     -- stylua: ignore
     keys = {
       { "]t",         function() require("todo-comments").jump_next() end, desc = "Next todo comment" },
@@ -311,15 +310,14 @@ return {
       { "<leader>xT", "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>",      desc = "Todo/Fix/Fixme (Trouble)" },
       { "<leader>st", "<cmd>TodoTelescope<cr>",                            desc = "Todo" },
     },
-    },
+  },
 
-    {
-      "VPavliashvili/json-nvim",
-      ft = "json",
-      config = function()
-        vim.keymap.set("n", "<leader>jff", "<cmd>JsonFormatFile<cr>")
-        vim.keymap.set("n", "<leader>jmf", "<cmd>JsonMinifyFile<cr>")
-      end,
-    },
+  {
+    "VPavliashvili/json-nvim",
+    ft = "json",
+    config = function()
+      vim.keymap.set("n", "<leader>jff", "<cmd>JsonFormatFile<cr>")
+      vim.keymap.set("n", "<leader>jmf", "<cmd>JsonMinifyFile<cr>")
+    end,
   },
 }

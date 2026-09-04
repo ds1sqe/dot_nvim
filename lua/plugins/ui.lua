@@ -217,6 +217,9 @@ return {
           },
           lualine_z = {
             function()
+              return string.format("%dx%d", vim.o.columns, vim.o.lines)
+            end,
+            function()
               return " " .. os.date("%R")
             end,
           },
